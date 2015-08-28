@@ -15,6 +15,8 @@
         private ICollection<Comment> comments;
         private ICollection<ApplicationUser> friends;
         private ICollection<FriendRequest> friendRequests;
+        private ICollection<Photo> photos;
+        private ICollection<Group> groups;
 
         public ApplicationUser()
         {
@@ -23,7 +25,8 @@
             this.comments = new HashSet<Comment>();
             this.friends = new HashSet<ApplicationUser>();
             this.friendRequests = new HashSet<FriendRequest>();
-
+            this.photos = new HashSet<Photo>();
+            this.groups = new HashSet<Group>();
         }
 
         [Required]
@@ -63,6 +66,24 @@
         {
             get { return this.friends; }
             set { this.friends = value; }
+        }
+
+        public virtual ICollection<FriendRequest> FriendRequests
+        {
+            get { return this.friendRequests; }
+            set { this.friendRequests = value; }
+        }
+
+         public virtual ICollection<Photo> Photos
+        {
+            get { return this.photos; }
+            set { this.photos = value; }
+        }
+
+         public virtual ICollection<Group> Groups
+        {
+            get { return this.groups; }
+            set { this.groups = value; }
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(

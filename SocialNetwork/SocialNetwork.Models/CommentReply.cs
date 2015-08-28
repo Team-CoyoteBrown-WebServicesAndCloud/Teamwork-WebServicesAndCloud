@@ -5,11 +5,11 @@ namespace SocialNetwork.Models
 {
     public class CommentReply
     {
-        private ICollection<CommentLike> commentLikes;
+        private ICollection<CommentLike> likes;
 
         public CommentReply()
         {
-            this.commentLikes = new HashSet<CommentLike>();
+            this.likes = new HashSet<CommentLike>();
         }
 
         public int Id { get; set; }
@@ -30,10 +30,10 @@ namespace SocialNetwork.Models
 
         public virtual ApplicationUser WallOwner { get; set; }
 
-        public virtual ICollection<CommentLike> CommentLikes
+        public virtual ICollection<CommentLike> Likes
         {
-            get { return this.commentLikes; }
-            set { this.commentLikes = value; }
+            get { return this.likes; }
+            set { this.likes = value; }
         }
 
     }

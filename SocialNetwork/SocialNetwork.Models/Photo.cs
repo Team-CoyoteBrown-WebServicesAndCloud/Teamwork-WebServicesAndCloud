@@ -6,12 +6,12 @@ namespace SocialNetwork.Models
     public class Photo
     {
         private ICollection<Comment> comments;
-        private ICollection<PhotoLike> photoLikes;
+        private ICollection<PhotoLike> likes;
 
         public Photo()
         {
             this.comments = new HashSet<Comment>();
-            this.photoLikes = new HashSet<PhotoLike>();
+            this.likes = new HashSet<PhotoLike>();
         }
         public int Id { get; set; }
 
@@ -34,10 +34,10 @@ namespace SocialNetwork.Models
             set { this.comments = value; }
         }
 
-        public virtual ICollection<PhotoLike> PhotoLikes
+        public virtual ICollection<PhotoLike> Likes
         {
-            get { return this.photoLikes; }
-            set { this.photoLikes = value; }
+            get { return this.likes; }
+            set { this.likes = value; }
         }
     }
 }

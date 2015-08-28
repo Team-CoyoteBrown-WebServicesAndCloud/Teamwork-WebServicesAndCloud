@@ -4,13 +4,13 @@ namespace SocialNetwork.Models
 {
     public class Group
     {
-        private ICollection<ApplicationUser> groupUsers;
-        private ICollection<GroupPost> groupPosts;
+        private ICollection<ApplicationUser> users;
+        private ICollection<GroupPost> posts;
 
         public Group()
         {
-            this.groupUsers = new HashSet<ApplicationUser>();
-            this.groupPosts = new HashSet<GroupPost>();
+            this.users = new HashSet<ApplicationUser>();
+            this.posts = new HashSet<GroupPost>();
         }
         public int Id { get; set; }
 
@@ -21,16 +21,16 @@ namespace SocialNetwork.Models
 
         public string CoverImageData { get; set; }
 
-        public virtual ICollection<ApplicationUser> GroupUsers
+        public virtual ICollection<ApplicationUser> Users
         {
-            get { return this.groupUsers; }
-            set { this.groupUsers = value; }
+            get { return this.users; }
+            set { this.users = value; }
         }
 
-        public virtual ICollection<GroupPost> GroupPosts
+        public virtual ICollection<GroupPost> Posts
         {
-            get { return this.groupPosts; }
-            set { this.groupPosts = value; }
+            get { return this.posts; }
+            set { this.posts = value; }
         }
 
 

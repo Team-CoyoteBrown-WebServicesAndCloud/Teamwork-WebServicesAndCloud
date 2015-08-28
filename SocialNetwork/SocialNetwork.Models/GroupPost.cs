@@ -7,12 +7,12 @@ namespace SocialNetwork.Models
     public class GroupPost
     {
         private ICollection<Comment> comments;
-        private ICollection<PostLike> postLikes;
+        private ICollection<PostLike> likes;
 
         public GroupPost()
         {
             this.comments = new HashSet<Comment>();
-            this.postLikes = new HashSet<PostLike>();
+            this.likes = new HashSet<PostLike>();
         }
 
         public int Id { get; set; }
@@ -39,10 +39,10 @@ namespace SocialNetwork.Models
             set { this.comments = value; }
         }
 
-        public virtual ICollection<PostLike> PostLikes
+        public virtual ICollection<PostLike> Likes
         {
-            get { return this.postLikes; }
-            set { this.postLikes = value; }
+            get { return this.likes; }
+            set { this.likes = value; }
         }
     }
 }
