@@ -58,8 +58,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\SocialNetworkContextData.cs" />
+    <Compile Include="Data\SocialNetworkData.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\ISocialNetworkContext.cs" />
+    <Compile Include="Interfaces\ISocialNetworkData.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SocialNetworkContext.cs" />
+    <Compile Include="Data\SocialNetworkContext.cs" />
+    <Compile Include="Repositories\GenericRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

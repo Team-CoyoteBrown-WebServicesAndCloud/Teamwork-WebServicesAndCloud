@@ -9,7 +9,10 @@ using System.Web.Routing;
 
 namespace SocialNetwork.Services
 {
-    public class WebApiApplication : System.Web.HttpApplication
+    using Data;
+    using Data.Data;
+
+    public class WebApiApplication : HttpApplication
     {
         protected void Application_Start()
         {
