@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace SocialNetwork.Models
+﻿namespace SocialNetwork.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class GroupPost
     {
         private ICollection<Comment> comments;
@@ -21,6 +21,7 @@ namespace SocialNetwork.Models
         [MinLength(5)]
         public string Content { get; set; }
 
+        [Required]
         public DateTime PostedOn { get; set; }
 
         [Required]

@@ -21,8 +21,10 @@
         [MinLength(5)]
         public string Content { get; set; }
 
+        [Required]
         public DateTime PostedOn { get; set; }
 
+        [Required]
         public int PostId { get; set; }
 
         public virtual Post Post { get; set; }

@@ -11,7 +11,7 @@
         private ISocialNetworkContext context;
         private IDictionary<Type, object> repositories;
 
-        public SocialNetworkData(ISocialNetworkContext context)
+        protected SocialNetworkData(ISocialNetworkContext context)
         {
             this.context = context;
             this.repositories = new Dictionary<Type, object>();
@@ -29,24 +29,9 @@
             get { return this.GetRepository<ApplicationUser>(); }
         }
 
-        public IRepository<Post> Posts
-        {
-            get { return this.GetRepository<Post>(); }
-        }
-
         public IRepository<Comment> Comments
         {
             get { return this.GetRepository<Comment>(); }
-        }
-
-        public IRepository<FriendRequest> FriendRequests
-        {
-            get { return this.GetRepository<FriendRequest>(); }
-        }
-
-        public IRepository<PostLike> PostLikes
-        {
-            get { return this.GetRepository<PostLike>(); }
         }
 
         public IRepository<CommentLike> CommentLikes
@@ -54,10 +39,56 @@
             get { return this.GetRepository<CommentLike>(); }
         }
 
+        public IRepository<CommentReply> CommentReplies
+        {
+            get { return this.GetRepository<CommentReply>(); }
+        }
+
+        public IRepository<FriendRequest> FriendRequests
+        {
+            get { return this.GetRepository<FriendRequest>(); }
+        }
+
+        public IRepository<Group> Groups
+        {
+            get { return this.GetRepository<Group>(); }
+        }
+
+        public IRepository<GroupPost> GroupPosts
+        {
+            get { return this.GetRepository<GroupPost>(); }
+        }
+
+        public IRepository<Notification> Notifications
+        {
+            get { return this.GetRepository<Notification>(); }
+        }
+
+        public IRepository<Photo> Photos
+        {
+            get { return this.GetRepository<Photo>(); }
+        }
+
+        public IRepository<PhotoLike> PhotoLikes
+        {
+            get { return this.GetRepository<PhotoLike>(); }
+        }
+
+        public IRepository<Post> Posts
+        {
+            get { return this.GetRepository<Post>(); }
+        }
+
+        public IRepository<PostLike> PostLikes
+        {
+            get { return this.GetRepository<PostLike>(); }
+        }
+
         public int SaveChanges()
         {
             return this.context.SaveChanges();
         }
+
         private IRepository<T> GetRepository<T>() where T : class
         {
             var typeOfModel = typeof(T);

@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-namespace SocialNetwork.Models
+﻿namespace SocialNetwork.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class PhotoLike
     {
         public int Id { get; set; }
 
-        //I'm not so shure about the comments ?!
-        public int CommentId { get; set; }
+        public int PhotoId { get; set; }
 
-        public virtual Comment Comment { get; set; }
+        public virtual Photo Photo { get; set; }
 
         [Required]
         public string AuthorId { get; set; }

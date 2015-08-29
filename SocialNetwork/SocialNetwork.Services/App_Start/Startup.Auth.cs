@@ -14,6 +14,8 @@ using SocialNetwork.Services.Models;
 
 namespace SocialNetwork.Services
 {
+    using Data.Data;
+
     public partial class Startup
     {
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }

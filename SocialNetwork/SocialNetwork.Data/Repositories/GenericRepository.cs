@@ -1,6 +1,7 @@
 ﻿namespace SocialNetwork.Data.Repositories
 {
     using System.Data.Entity;
+    using System.Linq;
     using Interfaces;
 
     public class GenericRepository<T> : IRepository<T> where T : class
@@ -20,7 +21,7 @@
             get { return this.set; }
         }
 
-        public System.Linq.IQueryable<T> All()
+        public IQueryable<T> All()
         {
             return this.set;
         }
@@ -49,6 +50,7 @@
         {
             var entity = this.Find(id);
             this.Delete(entity);
+
             return entity;
         }
 

@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-namespace SocialNetwork.Models
+﻿namespace SocialNetwork.Models
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class Group
     {
         private ICollection<ApplicationUser> users;
@@ -12,6 +13,7 @@ namespace SocialNetwork.Models
             this.users = new HashSet<ApplicationUser>();
             this.posts = new HashSet<GroupPost>();
         }
+       
         public int Id { get; set; }
 
         [Required]

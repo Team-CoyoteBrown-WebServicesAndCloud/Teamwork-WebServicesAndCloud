@@ -1,22 +1,22 @@
 ﻿namespace SocialNetwork.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Security.Claims;
     using System.Threading.Tasks;
+    using Enum;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
-    using SocialNetwork.Models.Enum;
-    using System.ComponentModel.DataAnnotations;
 
-    public class ApplicationUser : IdentityUser, IUser
+    public class ApplicationUser : IdentityUser
     {
-        private ICollection<Post> ownPosts;
-        private ICollection<Post> wallPosts;
         private ICollection<Comment> comments;
-        private ICollection<ApplicationUser> friends;
         private ICollection<FriendRequest> friendRequests;
-        private ICollection<Photo> photos;
+        private ICollection<ApplicationUser> friends;
         private ICollection<Group> groups;
+        private ICollection<Post> ownPosts;
+        private ICollection<Photo> photos;
+        private ICollection<Post> wallPosts;
 
         public ApplicationUser()
         {
@@ -29,17 +29,19 @@
             this.groups = new HashSet<Group>();
         }
 
-        [Required]
+        [MinLength(2)]
+        [MaxLength(30)]
         public string Name { get; set; }
 
         public string ProfileImageData { get; set; }
 
         public string CoverImageData { get; set; }
-        
+
         public string ProfileImageDataMinified { get; set; }
 
         public string Location { get; set; }
 
+        [Range(0, 100)]
         public int? Age { get; set; }
 
         public Gender Gender { get; set; }
@@ -74,13 +76,13 @@
             set { this.friendRequests = value; }
         }
 
-         public virtual ICollection<Photo> Photos
+        public virtual ICollection<Photo> Photos
         {
             get { return this.photos; }
             set { this.photos = value; }
         }
 
-         public virtual ICollection<Group> Groups
+        public virtual ICollection<Group> Groups
         {
             get { return this.groups; }
             set { this.groups = value; }

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-namespace SocialNetwork.Models
+﻿namespace SocialNetwork.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class CommentReply
     {
         private ICollection<CommentLike> likes;
@@ -18,15 +19,16 @@ namespace SocialNetwork.Models
         [MinLength(5)]
         public string Content { get; set; }
 
+        [Required]
         public DateTime RepliedOn { get; set; }
 
         [Required]
-        public int AuthorId { get; set; }
+        public string AuthorId { get; set; }
 
         public virtual ApplicationUser Author { get; set; }
 
         [Required]
-        public int WallOwnerId { get; set; }
+        public string WallOwnerId { get; set; }
 
         public virtual ApplicationUser WallOwner { get; set; }
 
@@ -35,6 +37,5 @@ namespace SocialNetwork.Models
             get { return this.likes; }
             set { this.likes = value; }
         }
-
     }
 }

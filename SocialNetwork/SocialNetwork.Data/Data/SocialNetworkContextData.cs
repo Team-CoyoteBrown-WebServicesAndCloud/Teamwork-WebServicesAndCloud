@@ -4,7 +4,8 @@
     public class SocialNetworkContextData : SocialNetworkData
     {
         // This constructor gives to SocialNetworkData context for work.
-        public SocialNetworkContextData() : base(new SocialNetworkContext())
+        public SocialNetworkContextData()
+            : base(new SocialNetworkContext())
         {
         }
     }

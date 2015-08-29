@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-namespace SocialNetwork.Models
+﻿namespace SocialNetwork.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class Photo
     {
         private ICollection<Comment> comments;
@@ -21,10 +22,11 @@ namespace SocialNetwork.Models
         //content
         public string Description { get; set; }
 
+        [Required]
         public DateTime UploadedOn { get; set; }
 
         [Required]
-        public int PhotoOwnerId { get; set; }
+        public string PhotoOwnerId { get; set; }
 
         public virtual ApplicationUser PhotoOwner { get; set; }
 
