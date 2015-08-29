@@ -1,0 +1,18 @@
+<form class="post-form">
+    <fieldset>
+        <div class="form-group">
+                        <textarea class="form-control postTextarea"
+                                  id="post-content"
+                                  ng-model="postContent"
+                                  placeholder="Any cool story you wanna share?"></textarea>
+        </div>
+        <div class="form-group userWallPostButton">
+            <button type="button"
+                    ng-click="addNewPost(postContent)"
+                    class="submitButton btn btn-primary"
+                    id="submit-post-btn">
+                Post
+            </button>
+        </div>
+    </fieldset>
+</form>

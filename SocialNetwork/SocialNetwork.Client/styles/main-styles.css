@@ -1,0 +1,344 @@
+@font-face {
+    font-family: usernameFont;
+    src: url('../resourses/fonts/rafale_bg-webfont.ttf');
+}
+
+#wrapper{
+    margin-top: 3.7%;
+}
+
+a{
+    text-decoration: none !important;
+}
+
+.container{
+    padding: 0 !important;
+}
+
+.home-background-image-section{
+    display: block;
+    margin-top: 15%;
+}
+
+.home-background-image{
+    max-width: 100%;
+}
+
+.main-footer{
+    display: inline-block;
+    width: 100%;
+    background-color: #222;
+    color: #fff;
+    height: 40px;
+    margin-top: -.8%;
+    text-align: center;
+}
+
+.main-footer > *{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.pageName{
+    font-size: 2em;
+    font-family: bree-web, Bree, sans-serif;
+    text-align: center;
+}
+
+.mainPageName{
+    text-align: left !important;
+}
+
+.radio-option{
+    margin-right: 3%;
+}
+
+.login, .register{
+    margin-top: 8%;
+}
+
+.change-password:before{
+    content: url('../resourses/images/change-password.png');
+}
+
+.edit-profile:before{
+    content: url('../resourses/images/edit-profile.png');
+}
+
+.nav-icon:before{
+    vertical-align: sub;
+    margin-right: 3%;
+}
+
+.nav-controller{
+    width: 65%;
+}
+
+.search-box{
+    width: 58%;
+    height: 50px !important;
+    margin-left: 5%;
+}
+
+.search-input-box{
+    width: 85%;
+}
+
+.search-input{
+    width: 100% !important;
+    height: 30px !important;
+}
+
+.search-form{
+    width: 100% !important;
+}
+
+.search-icon{
+    vertical-align: super;
+}
+
+.search-btn{
+    height: 30px;
+}
+
+.news-feed{
+    background: url("../resourses/images/news-feed.png") no-repeat;
+}
+
+.friend-request{
+    background: url("../resourses/images/friend-request.png") no-repeat;
+}
+
+.listElementLarge:not(:last-child){
+    border-bottom: 1px solid rgba(86, 86, 86, 0.53);
+    padding-bottom: 10px;
+}
+
+.listElementLarge:first-child{
+    padding-top: 10px;
+}
+
+.listElementLarge{
+    margin-bottom: 10px;
+}
+
+.listElementMedium{
+    margin-bottom: 5px !important;
+}
+
+.userImageMedium{
+    width: 60px;
+    height: 60px;
+}
+
+.userImageSmall{
+    width: 40px;
+    height: 40px;
+}
+
+.friendRequestList{
+    width: 300px !important;
+}
+
+.mediumsSection{
+    text-align: center;
+}
+
+.mediumsSection > div{
+    padding-top: 10px;
+}
+
+.userNameMedium{
+    font-size: 1.3em;
+    font-family: usernameFont, sans-serif;
+    font-weight: bold;
+    color: #484848;
+    max-width: 100px;
+}
+
+.userNameMedium:hover{
+    text-decoration: underline;
+}
+
+.important{
+    font-style: italic;
+    font-weight: bold;
+    color: #000;
+}
+
+.largeSection{
+    padding-top: 10px;
+}
+
+.userNameLarge{
+    font-size: 1.3em;
+    color: #2a2a2a !important;
+}
+
+.showAllFriendRequests{
+    text-align: center;
+}
+
+.allFriendRequestsButton{
+    border: none;
+    background: none;
+    margin-bottom: 8px;
+}
+
+.allFriendRequestsButton:hover{
+    text-decoration: underline;
+}
+
+.gender{
+    width: 23px;
+    height: 32px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 7px;
+}
+
+.femaleGender{
+    background: url("../resourses/images/female-symbol.png") no-repeat;
+}
+
+.maleGender{
+    background: url("../resourses/images/male-symbol.png") no-repeat;
+}
+
+.otherGender{
+    background: url("../resourses/images/other-symbol.png") no-repeat;
+}
+
+.btnRequest{
+    width: 75px;
+    height: 27px;
+    padding: 0 !important;
+}
+
+.friendRequestsCount{
+    top: 5px;
+    left: 20px;
+    color: #fff;
+    position: absolute;
+    background: red;
+    padding: 1px 6px;
+    padding-right: 7px;
+    border-radius: 50px;
+}
+
+.friendRequestOptionButtons{
+    text-align: center;
+}
+
+.icon{
+    background-size: 80%;
+    background-position: center;
+    height: 50px;
+    transition: all .1s ease-in-out;
+    opacity: 0.6;
+}
+
+.icon:hover{
+    background-size: 90%;
+    opacity: 1;
+}
+
+.upload-cover-image{
+    text-align: center;
+    margin-bottom: 6%;
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+}
+
+.file-button{
+    display: none !important;
+}
+
+#upload-cover-image-preview-section {
+    margin: 1% auto;
+}
+
+.upload-cover-image-preview {
+    width: 100%;
+    margin-bottom: 3%;
+}
+
+.upload-profile-image{
+    width: 42%;
+    margin-left: 3%;
+    text-align: center;
+    display: inline-block;
+}
+
+.upload-profile-image-preview{
+    max-width: 90%;
+    margin-bottom: 5%;
+}
+
+.maxPictureSize{
+    margin: -3% 0 0;
+    font-size: 1.3em;
+}
+
+.edit-profile-info{
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+}
+
+.form{
+    margin-bottom: 7% !important;
+    display: inline-block !important;
+    vertical-align: top;
+}
+
+.edit-profile-left{
+    width: 52%;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 2%;
+}
+
+.image-preview{
+    border: 2px solid #222222;
+}
+
+.buttons{
+    margin-top: 2%;
+}
+
+.header-profile-image{
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    border-radius: 100px;
+    margin-top: -4px;
+}
+
+.header-data{
+    display: inline-block !important;
+}
+
+.header-data > a {
+    display: inline-block !important;
+}
+
+.searchList{
+    background: #ffffff;
+    margin-top: 20px;
+    border: 1px solid #505050;
+    padding: 0;
+    list-style: none;
+    box-shadow: inset 0 0 0 1px rgba(31,31,31,.36),0 0 10px rgba(0,0,0,.45),0 0 10px rgba(0,0,0,.35);
+}
+
+#newsFeed {
+    margin-top: 20px;
+}
+
+@media (min-width: 1366px) {
+    .container{
+        max-width: 1024px;
+    }
+}

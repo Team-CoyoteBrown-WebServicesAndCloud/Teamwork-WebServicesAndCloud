@@ -1,0 +1,28 @@
+<div ng-include="'templates/partial/navbar-header.html'"></div>
+<main id="wrapper">
+    <section class="col-lg-8 col-lg-offset-2" id="mainSection" ng-controller="UserController" ng-init="getFriendRequests()">
+        <div class="pageName">Total Pending Friend Requests: {{friendRequests.length}}</div>
+        <div class="searchSection">
+            <input placeholder="Find by name..." id="searchInput" type="text" ng-model="filterRequests.user.name">
+        </div>
+        <ul class="listSection">
+            <li ng-repeat="request in friendRequests | filter: filterRequests" class="listElement col-lg-3">
+                <div class="imageSection">
+                    <a href="#/users/{{request.user.username}}">
+                        <img class="largeImageThumbnail" ng-src="{{request.user.profileImageData}}"/>
+                    </a>
+                </div>
+                <div class="userInfoSection">
+                    <a class="largeUsername" href="#/users/{{request.user.username}}"><span>{{request.user.name}}</span></a>
+                    <span ng-if="(request.user.gender | genderFilter) == 'Female'" class="femaleGender gender pendingGender"></span>
+                    <span ng-if="(request.user.gender | genderFilter) == 'Male'" class="maleGender gender pendingGender"></span>
+                    <span ng-if="(request.user.gender | genderFilter) == 'Other'" class="otherGender gender pendingGender"></span>
+                </div>
+                <div class="pendingRequestOptionButtons">
+                    <button ng-click="approveFriendRequest(request.id)" class="btn btn-success btnRequest">Approve</button>
+                    <button ng-click="rejectFriendRequest(request.id)" class="btn btn-danger btnRequest">Reject</button>
+                </div>
+            </li>
+        </ul>
+    </section>
+</main>

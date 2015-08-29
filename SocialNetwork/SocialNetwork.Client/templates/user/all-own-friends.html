@@ -1,0 +1,26 @@
+<div ng-include="'templates/partial/navbar-header.html'"></div>
+<main id="wrapper">
+    <section class="col-lg-8 col-lg-offset-2" id="mainSection" ng-controller="UserController" ng-init="getOwnFriendsDetailed()">
+        <div class="pageName">
+            <p>Total Friends: {{ownFriendsDetailed.length}}</p>
+        </div>
+        <div class="searchSection">
+            <input placeholder="Find by name..." id="searchInput" type="text" ng-model="friend.name">
+        </div>
+        <ul class="listSection">
+            <li ng-repeat="friend in ownFriendsDetailed | filter: friend" class="listElement col-lg-3">
+                <div class="imageSection">
+                    <a href="#/users/{{friend.username}}">
+                        <img class="largeImageThumbnail" ng-src="{{friend.profileImageData}}"/>
+                    </a>
+                </div>
+                <div class="userInfoSection">
+                    <a class="largeUsername" href="#/users/{{friend.username}}"><span>{{friend.name}}</span></a>
+                    <span ng-if="(request.user.gender | genderFilter) == 'Female'" class="femaleGender gender pendingGender"></span>
+                    <span ng-if="(request.user.gender | genderFilter) == 'Male'" class="maleGender gender pendingGender"></span>
+                    <span ng-if="(request.user.gender | genderFilter) == 'Other'" class="otherGender gender pendingGender"></span>
+                </div>
+            </li>
+        </ul>
+    </section>
+</main>

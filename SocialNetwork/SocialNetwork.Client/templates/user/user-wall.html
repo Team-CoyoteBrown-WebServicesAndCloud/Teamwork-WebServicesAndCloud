@@ -1,0 +1,13 @@
+<div ng-include="'templates/partial/navbar-header.html'"></div>
+<section id="userWall" class="col-lg-8 col-lg-offset-2" ng-controller="UserController">
+    <header id="userWallHeader" class="clearfix" ng-init="getUserFullData()" ng-include="'templates/partial/user-wall-header.html'"></header>
+    <div class="userWallMain col-lg-12" ng-controller="PostController" ng-init="getUserWallPage()">
+        <div ng-if="userFullData.isFriend || isAuthorized()"
+             ng-include="'templates/partial/post-container.html'"
+             class="post-container form-horizontal col-lg-7"
+             id="post-container">
+        </div>
+        <aside ng-if="userFullData.isFriend" ng-include="'templates/partial/friend-friends-preview.html'"></aside>
+        <section class="col-lg-7 userPagePostsSection" ng-include="'templates/partial/posts.html'"></section>
+    </div>
+</section>

@@ -1,0 +1,9 @@
+<script>console.log(10)</script>
+<div ng-include="'templates/partial/navbar-header.html'"></div>
+<main id="wrapper" class="col-lg-10 col-lg-offset-1">
+    <section ng-if="!isLogged" id="home-background-image-section">
+        <img class="home-background-image" src="resourses/images/home-screen.jpg"/>
+    </section>
+    <section ng-if="isLogged" id="newsFeed" ng-include="'templates/news-feed.html'"></section>
+    <aside ng-if="isLogged" class="col-lg-4 pull-right clearfix" ng-include="'templates/partial/friends-preview.html'"></aside>
+</main>

@@ -1,0 +1,84 @@
+/*Header*/
+#userWall{
+    margin-top: 3%;
+}
+
+#userProfileImageSection{
+    position: absolute;
+    width: 145px;
+    height: 145px;
+    display: inline-block;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    top: 150px;
+    left: 70px;
+}
+
+.userProfileImage{
+    width: 139px;
+    height: 139px;
+    border-radius: 100px;
+}
+
+#userWallHeader{
+    width: 100%;
+}
+
+#userCoverImageSection{
+    width: 850px;
+    height: 315px;
+    position: absolute;
+    text-align: center;
+}
+
+.userCoverImage{
+    width: 850px;
+    height: 315px;
+}
+
+#userNameSection{
+    position: absolute;
+    top: 190px;
+    left: 240px;
+    text-align: center;
+}
+
+#isFriendSection{
+    position: absolute;
+    top: 270px;
+    right: 55px;
+}
+
+.friendRequestButton{
+    padding: 3px 12px;
+    background: rgba(95, 95, 95, 0.8);
+    border: 1px solid #313131;
+    border-radius: 3px;
+    color: #fff;
+    transition: all .2s ease-in-out;
+}
+
+.friendRequestButton:hover{
+    background: #696969;
+}
+
+.friendButton:hover{
+    background: rgba(95, 95, 95, 0.8);
+    cursor: context-menu;
+}
+
+.name{
+    font-family: usernameFont, sans-serif;
+    font-weight: bold;
+    font-size: 2em;
+    color: #fff;
+}
+
+.userName{
+    margin: 0 0 -5%;
+}
+
+.userUsername{
+    margin: 0;
+}
+/*End of User Wall Header*/

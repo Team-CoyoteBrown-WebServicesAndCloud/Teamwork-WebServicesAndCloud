@@ -1,0 +1,137 @@
+<header class="well wallPostHeader" ng-controller="UserController">
+    <div ng-if="wallPosts.length" class="wallPostHeaderText">{{userFullData.name}} wall posts</div>
+    <div ng-if="!wallPosts.length" class="wallPostHeaderText">No posts on {{userFullData.name}}'s wall</div>
+</header>
+<section id="posts" ng-repeat="post in wallPosts">
+    <article class="post well">
+        <header class="post-header">
+            <div class="post-image">
+                <a href="#/users/{{post.author.username}}">
+                    <img class="mini-thumbnail" ng-src="{{post.author.profileImageData}}"/>
+                </a>
+            </div>
+            <div class="post-info">
+                <div class="postUserInfo">
+                    <a href="#/users/{{post.author.username}}" class="profile-link">{{post.author.name}}</a>
+                    <span>made a post</span>
+                </div>
+                <div class="dateTime">
+                    <span>on</span>
+                    <time>{{post.date | date:"EEEE, MMMM d, y 'at' h:mm a"}}</time>
+                </div>
+            </div>
+            <aside class="otpions commentOptions pull-right">
+                <img ng-if="isEditable(post.author)"
+                     class="postIcon clickableIcon"
+                     ng-click="post.editing = !post.editing; post.editedPostContent = post.postContent"
+                     src="resourses/images/edit-button.png"/>
+                <img ng-if="isDeletable(post)"
+                     class="postIcon clickableIcon"
+                     ng-click="deletePost(post.id)"
+                     src="resourses/images/delete-button.png"/>
+            </aside>
+        </header>
+        <section class="post-content">
+            <div ng-if="post.editing" class="editContentSection clearfix">
+                <textarea class="editContent col-lg-12" rows="4" ng-model="post.editedPostContent"></textarea>
+
+                <div class="optionButtons col-lg-5 col-lg-offset-4">
+                    <button class="btn btn-default btnEdit" ng-click="editPost(post.editedPostContent, post.id)">
+                        Edit
+                    </button>
+                    <a class="btn btn-default btnEdit" ng-click="post.editing = false">Cancel</a>
+                </div>
+            </div>
+            <p ng-show="!post.editing" class="content">{{post.postContent}}</p>
+        </section>
+        <section class="postInfoBox clearfix">
+            <div class="comments pull-right">
+                <img class="postIcon" src="resourses/images/comment-icon.png" alt=""/>
+                <span class="queryResult">{{post.totalCommentsCount}}</span>
+            </div>
+            <div ng-if="isAuthorized(post)" class="likes pull-right">
+                <img ng-click="likePost(post.id)" ng-if="!post.liked" class="postIcon clickableIcon"
+                     src="resourses/images/like-button.png"/>
+                <img ng-click="unlikePost(post.id)" ng-if="post.liked" class="postIcon clickableIcon"
+                     src="resourses/images/unlike-button.png"/>
+                <span class="queryResult">{{post.likesCount}}</span>
+            </div>
+        </section>
+        <section class="commentsSection clearfix">
+            <header class="userComment clearfix" ng-controller="AuthenticationController" ng-if="isAuthorized(post)">
+                <textarea rows="2" class="userCommentText textComment col-lg-12" ng-model="commentContent"></textarea>
+                <div class="commentAuthorSection clearfix pull-left" ng-init="userData()">
+                    <img class="commentAuthorImage" ng-src="{{userData.profileImageData}}"/>
+                    <div class="commentAuthorText">as <span class="commentAuthorName">{{userData.name}}</span></div>
+                </div>
+                <button ng-click="addNewComment(commentContent, post.id)"
+                        class="submitButton commentButton clearfix pull-right">Comment
+                </button>
+            </header>
+            <section ng-if="post.comments.length" class="postCommentsSection col-lg-11 col-lg-offset-1">
+                <section class="postComments clearfix" ng-repeat="comment in post.comments">
+                    <div class="postComment">
+                        <div class="post-image">
+                            <a href="#/users/{{comment.author.username}}">
+                                <img class="comment-mini-thumbnail"
+                                     ng-src="{{comment.author.profileImageData}}"/>
+                            </a>
+                        </div>
+                        <div class="comment-info post-info">
+                            <div class="postUserInfo">
+                                <a href="#/users/{{comment.author.username}}" class="profile-link">{{comment.author.name}}</a>
+                            </div>
+                            <div class="dateTime commentTime">
+                                <span>on</span>
+                                <time>{{comment.date | date:"EEEE, MMMM d, y 'at' h:mm a"}}</time>
+                            </div>
+                        </div>
+                    </div>
+                    <aside ng-if="isAuthorized(post)" class="options commentOptions pull-right">
+                        <img ng-if="!comment.liked"
+                             ng-click="likeComment(comment.id, post.id)"
+                             class="postIcon clickableIcon"
+                             src="resourses/images/like-button.png"/>
+                        <img ng-if="comment.liked"
+                             ng-click="unlikeComment(comment.id, post.id)"
+                             class="postIcon clickableIcon"
+                             src="resourses/images/unlike-button.png"/>
+                        <span class="queryResult">{{comment.likesCount}}</span>
+                        <img ng-if="isEditable(comment.author)"
+                             ng-click="comment.editing = !comment.editing; comment.editedCommentContent = comment.commentContent"
+                             class="postIcon clickableIcon"
+                             src="resourses/images/edit-button.png"/>
+                        <img ng-if="isDeletable(post, comment.author)"
+                             ng-click="deleteComment(comment.id, post.id)"
+                             class="postIcon clickableIcon"
+                             src="resourses/images/delete-button.png"/>
+                    </aside>
+                    <section class="post-content">
+                        <div ng-if="comment.editing" class="editContentSection clearfix">
+                                        <textarea class="editContent editComment col-lg-9"
+                                                  ng-model="comment.editedCommentContent"></textarea>
+
+                            <div class="optionButtons col-lg-5 col-lg-offset-2">
+                                <button class="btn btn-default btnEditComment"
+                                        ng-click="editComment(comment.editedCommentContent, comment.id, post.id)">Edit
+                                </button>
+                                <a class="btn btn-default btnEditComment"
+                                   ng-click="comment.editing = false">Cancel
+                                </a>
+                            </div>
+                        </div>
+                        <p ng-show="!comment.editing" class="content">{{comment.commentContent}}</p>
+                    </section>
+                </section>
+            </section>
+            <button ng-if="post.comments.length < post.totalCommentsCount"
+                    ng-click="getPostComments(post)"
+                    class="extraComments pull-right">Show all comments...
+            </button>
+            <button ng-if="post.comments.length == post.totalCommentsCount && post.totalCommentsCount > 3"
+                    ng-click="hidePostComments(post)"
+                    class="extraComments pull-right">Hide comments...
+            </button>
+        </section>
+    </article>
+</section>

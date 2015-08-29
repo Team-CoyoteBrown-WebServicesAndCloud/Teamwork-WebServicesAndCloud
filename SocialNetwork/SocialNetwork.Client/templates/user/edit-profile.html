@@ -1,0 +1,94 @@
+<div ng-include="'templates/partial/navbar-header.html'"></div>
+<section class="container register">
+    <div class="well bs-component col-lg-10 col-lg-offset-1 form">
+        <form class="form-horizontal" ng-controller="AuthenticationController" ng-init="userData()">
+            <fieldset>
+                <legend>Edit Profile</legend>
+                <div class="edit-profile-left">
+                    <div class="edit-profile-info">
+                        <div class="form-group ">
+                            <label for="name" class="col-lg-2 control-label">Name:</label>
+
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="name" placeholder="Name"
+                                       ng-model="userData.name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail" class="col-lg-2 control-label">Email:</label>
+
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputEmail" placeholder="Email"
+                                       ng-model="userData.email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Radios</label>
+
+                            <div class="col-lg-10">
+                                <div class="radio">
+                                    <label class="radio-option">
+                                        <input type="radio" name="gender" id="gender-male" class="radio-input"
+                                               value="male"
+                                               ng-model="userData.gender">
+                                        Male
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="gender" id="gender-female" class="radio-input"
+                                               value="female"
+                                               ng-model="userData.gender">
+                                        Female
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="gender" id="gender-other" class="radio-input"
+                                               value="other"
+                                               ng-model="userData.gender">
+                                        Other
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upload-cover-image">
+                        <section id="upload-cover-image-preview-section">
+                            <img class="upload-cover-image-preview image-preview"
+                                 ng-src="{{userData.coverImageData}}"
+                                 base-sixty-four-image="userData.coverImageData"/>
+                        </section>
+                        <p class="maxPictureSize">Max size: 128K</p>
+                        <label class="btn btn-primary" for="cover-image">
+                            <input class="file-button"
+                                   id="cover-image"
+                                   type="file"
+                                   ng-model="userData.coverImageData"
+                                   base-sixty-four-input>
+                            Change cover image
+                        </label>
+                    </div>
+                </div>
+                <div class="upload-profile-image">
+                    <section id="upload-profile-image-preview-section">
+                        <img class="upload-profile-image-preview image-preview"
+                             ng-src="{{userData.profileImageData}}"
+                             base-sixty-four-image="userData.profileImageData"/>
+                    </section>
+                    <p class="maxPictureSize">Max size: 128K</p>
+                    <label class="btn btn-primary" for="profile-image">
+                        <input class="file-button"
+                               id="profile-image"
+                               type="file"
+                               ng-model="userData.profileImageData"
+                               base-sixty-four-input>
+                        Change profile image
+                    </label>
+                </div>
+                <div class="form-group buttons">
+                    <div class="col-lg-10 col-lg-offset-5">
+                        <a href="#/" class="btn btn-default">Cancel</a>
+                        <button ng-click="editProfile(userData)" type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,19 @@
+<div>
+    <div id="userCoverImageSection">
+        <img ng-if="userFullData.coverImageData" ng-src="{{userFullData.coverImageData}}" class="userCoverImage"/>
+    </div>
+    <div id="userProfileImageSection">
+        <img ng-src="{{userFullData.profileImageData}}" class="userProfileImage"/>
+    </div>
+    <div id="userNameSection">
+        <p class="userName name">{{userFullData.name}}</p>
+        <p class="userUsername name">({{userFullData.username}})</p>
+    </div>
+    <div id="isFriendSection">
+        <button ng-click="sendFriendRequest()" class="friendRequestButton"
+                ng-if="userFullData.userStatus === 'invite'">Send Friend Request
+        </button>
+        <div class="friendRequestButton friendButton" ng-if="userFullData.userStatus === 'friend'">Friend</div>
+        <div class="friendRequestButton friendButton" ng-if="userFullData.userStatus === 'pending'">Friend Request Pending</div>
+    </div>
+</div>
