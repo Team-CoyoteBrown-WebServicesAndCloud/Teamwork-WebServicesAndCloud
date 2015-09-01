@@ -6,12 +6,18 @@
     using Models;
     using Repositories;
 
-    public abstract class SocialNetworkData : ISocialNetworkData
+    public class SocialNetworkData : ISocialNetworkData
     {
         private ISocialNetworkContext context;
         private IDictionary<Type, object> repositories;
 
-        protected SocialNetworkData(ISocialNetworkContext context)
+        public SocialNetworkData()
+            : this(new SocialNetworkContext())
+        {
+            
+        }
+
+        public SocialNetworkData(ISocialNetworkContext context)
         {
             this.context = context;
             this.repositories = new Dictionary<Type, object>();
@@ -82,6 +88,14 @@
         public IRepository<PostLike> PostLikes
         {
             get { return this.GetRepository<PostLike>(); }
+        }
+
+        public IRepository<UserSession> UserSessions
+        {
+            get
+            {
+                return this.GetRepository<UserSession>();
+            }
         }
 
         public int SaveChanges()

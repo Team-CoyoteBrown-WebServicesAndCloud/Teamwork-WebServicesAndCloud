@@ -26,7 +26,7 @@ app.factory('authenticationService', function ($http, baseServiceUrl, $localStor
             method: 'GET',
             url: baseServiceUrl + '/me',
             headers: this.getHeaders()
-        })
+        });
     };
 
     authenticationService.login = function (userData) {
@@ -34,7 +34,7 @@ app.factory('authenticationService', function ($http, baseServiceUrl, $localStor
             method: 'POST',
             url: baseServiceUrl + '/users/login',
             data: userData
-        })
+        });
     };
 
     authenticationService.register = function (userData) {

@@ -28,6 +28,8 @@
 
         IRepository<PostLike> PostLikes { get; }
 
+        IRepository<UserSession> UserSessions { get; }
+
         int SaveChanges();
     }
 }

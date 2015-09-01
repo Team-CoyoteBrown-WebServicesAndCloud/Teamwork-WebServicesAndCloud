@@ -37,6 +37,8 @@ namespace SocialNetwork.Data.Data
 
         public IDbSet<CommentLike> CommentLikes { get; set; }
 
+        public IDbSet<UserSession> Sessions { get; set; }
+
         public static SocialNetworkContext Create()
         {
             return new SocialNetworkContext();

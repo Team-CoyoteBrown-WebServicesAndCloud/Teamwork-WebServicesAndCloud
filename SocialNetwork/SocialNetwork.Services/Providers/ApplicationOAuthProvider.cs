@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OAuth;
-using SocialNetwork.Models;
-using SocialNetwork.Services.Models;
-
-namespace SocialNetwork.Services.Providers
+﻿namespace SocialNetwork.Services.Providers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using Data.Data;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin.Security;
+    using Microsoft.Owin.Security.Cookies;
+    using Microsoft.Owin.Security.OAuth;
+    using SocialNetwork.Models;
+
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
@@ -30,7 +28,9 @@ namespace SocialNetwork.Services.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
+            //var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
+            var userManager = new ApplicationUserManager(
+                new UserStore<ApplicationUser>(new SocialNetworkContext()));
 
             ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
 
@@ -40,10 +40,15 @@ namespace SocialNetwork.Services.Providers
                 return;
             }
 
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
+           ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
                OAuthDefaults.AuthenticationType);
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
                 CookieAuthenticationDefaults.AuthenticationType);
+
+            oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            cookiesIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            oAuthIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            cookiesIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
 
             AuthenticationProperties properties = CreateProperties(user.UserName);
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);

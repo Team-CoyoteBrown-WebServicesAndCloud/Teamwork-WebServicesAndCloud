@@ -29,6 +29,8 @@
 
         IDbSet<PostLike> PostLikes { get; set; }
 
+        IDbSet<UserSession> Sessions { get; set; }
+
         IDbSet<TEntity> Set<TEntity>() where TEntity : class;
 
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;

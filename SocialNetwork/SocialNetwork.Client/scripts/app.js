@@ -2,7 +2,7 @@
 
 var app = angular.module('socialNetworkApp', ['ngRoute', 'ngResource', 'naif.base64', 'ngStorage']);
 
-app.constant('baseServiceUrl', 'http://localhost:52209');
+app.constant('baseServiceUrl', 'http://localhost:52209/api');
 
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
