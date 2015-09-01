@@ -1,15 +1,22 @@
-<header class="well wallPostHeader" ng-controller="UserController">
-    <div ng-if="wallPosts.length" class="wallPostHeaderText">{{userFullData.name}} wall posts</div>
-    <div ng-if="!wallPosts.length" class="wallPostHeaderText">No posts on {{userFullData.name}}'s wall</div>
+<header class="col-lg-offset-2" ng-controller="UserController">
+    <p class="pageName mainPageName">News Feed</p>
 </header>
-<section id="posts" ng-repeat="post in wallPosts">
-    <article class="post well" infinite-scroll='getWallPosts()'>
+<section id="posts" ng-repeat="post in newsFeed">
+    <article class="post well">
         <header class="post-header">
             <div class="post-image">
-                <img class="mini-thumbnail hover-box" popup-show="templates/partial/user-preview.html" ng-click="getUserPreviewData(post.author.username)" ng-src="{{post.author.profileImageData}}"/>
+                <img class="mini-thumbnail hover-box"
+                     popup-show="templates/partial/user-preview.html"
+                     ng-click="getUserPreviewData(post.author.username)"
+                     ng-src="{{post.author.profileImageData}}"/>
             </div>
             <div class="post-info">
-                <div class="postUserInfo">
+                <div ng-if="post.wallOwner.username !== post.author.username" class="postUserInfo">
+                    <a href="#/users/{{post.author.username}}" class="profile-link">{{post.author.name}}</a>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <a href="#/users/{{post.wallOwner.username}}" class="profile-link">{{post.wallOwner.name}}</a>
+                </div>
+                <div ng-if="post.wallOwner.username === post.author.username" class="postUserInfo">
                     <a href="#/users/{{post.author.username}}" class="profile-link">{{post.author.name}}</a>
                     <span>made a post</span>
                 </div>
@@ -58,8 +65,10 @@
         <section class="commentsSection clearfix">
             <header class="userComment clearfix" ng-controller="AuthenticationController" ng-if="isAuthorized(post)">
                 <textarea rows="2" class="userCommentText textComment col-lg-12" ng-model="post.commentContent"></textarea>
+
                 <div class="commentAuthorSection clearfix pull-left" ng-init="userData()">
                     <img class="commentAuthorImage" ng-src="{{userData.profileImageData}}"/>
+
                     <div class="commentAuthorText">as <span class="commentAuthorName">{{userData.name}}</span></div>
                 </div>
                 <button ng-click="addNewComment(post)"
@@ -106,7 +115,9 @@
                     </aside>
                     <section class="post-content">
                         <div ng-if="comment.editing" class="editContentSection clearfix">
-                            <textarea class="editContent editComment col-lg-9" ng-model="comment.editedCommentContent"></textarea>
+                                        <textarea class="editContent editComment col-lg-9"
+                                                  ng-model="comment.editedCommentContent"></textarea>
+
                             <div class="optionButtons col-lg-5 col-lg-offset-2">
                                 <button class="btn btn-default btnEditComment"
                                         ng-click="editComment(comment, post)">Edit
@@ -131,3 +142,6 @@
         </section>
     </article>
 </section>
+<div class="infoText" ng-if="newsFeed.length == 0">
+    <p>Find new people, share info, have fun!</p>
+</div>

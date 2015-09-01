@@ -83,6 +83,23 @@ app.factory('userService', function ($http, baseServiceUrl, $localStorage, authe
         })
     };
 
+    userService.getNewsFeed = function (pageSize, startPostId) {
+        startPostId = startPostId ? "=" + startPostId : "";
+        return $http({
+            method: 'GET',
+            url: baseServiceUrl + '/me/feed?StartPostId' + startPostId + '&PageSize=' + pageSize,
+            headers: authenticationService.getHeaders()
+        })
+    };
+
+    userService.getUserPreviewData = function (username) {
+        return $http({
+            method: 'GET',
+            url: baseServiceUrl + '/users/' + username + '/preview',
+            headers: authenticationService.getHeaders()
+        })
+    };
+
     return userService;
 });
 

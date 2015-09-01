@@ -1,5 +1,5 @@
-<section class="clearfix friendBoxAside" id="friends-section" ng-controller="UserController" ng-init="getOwnFriendsPreview()">
-    <div class="well bs-component">
+<section ng-init="getOwnFriendsPreview()">
+    <div class="friendsBox well bs-component">
         <div class="friendsCount" ng-init="userData()">
             <a class="friendsCountLink" href="#/me/friends/">
                 <p class="friendsTitle">Friends - </p>
@@ -8,8 +8,11 @@
         </div>
         <ul class="friendsBoxList">
             <li class="friendBoxPreviewElement" ng-repeat="friend in ownFriendsPreview.friends">
-                <a href="#/users/{{friend.username}}/" class="friendsBoxPreview" >
-                    <img class="friendBoxPreviewImage" ng-src="{{friend.profileImageData}}"/>
+                <img class="friendBoxPreviewImage hover-box"
+                     popup-show="templates/partial/user-preview.html"
+                     ng-click="getUserPreviewData(friend.username)"
+                     ng-src="{{friend.profileImageData}}"/>
+                <a href="#/users/{{friend.username}}/" class="friendsBoxPreview">
                     <div class="friendName">{{friend.name}}</div>
                 </a>
             </li>

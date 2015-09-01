@@ -32,15 +32,14 @@
     border-top: 1px solid #000000;
 }
 
-.friendsBox{
-    width: 23%;
-    float: right;
-    right: 5%;
-    position: relative;
+#friendAside{
+    width: 97%;
+    right: 265px;
+    margin-top: 120px;
 }
 
-.friendFriendsBox{
-    width: 36.3%;
+.friendsBox{
+    width: 35.2%;
     float: right;
     right: 0 !important;
     position: relative;

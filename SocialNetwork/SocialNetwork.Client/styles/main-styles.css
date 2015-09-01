@@ -45,6 +45,11 @@ a{
     text-align: center;
 }
 
+.infoText{
+    font-size: 1.7em;
+    font-family: bree-web, Bree, sans-serif;
+}
+
 .mainPageName{
     text-align: left !important;
 }
@@ -333,8 +338,14 @@ a{
     box-shadow: inset 0 0 0 1px rgba(31,31,31,.36),0 0 10px rgba(0,0,0,.45),0 0 10px rgba(0,0,0,.35);
 }
 
+.mainContent{
+    width: 65%;
+    margin-left: 17%;
+    background: rgba(177, 0, 0, 0.37);
+}
+
 #newsFeed {
-    margin-top: 20px;
+    margin-top: -50px;
 }
 
 @media (min-width: 1366px) {

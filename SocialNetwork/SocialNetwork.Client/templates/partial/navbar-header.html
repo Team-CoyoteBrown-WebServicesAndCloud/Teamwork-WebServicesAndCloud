@@ -31,12 +31,15 @@
                                 <a href="#/users/{{request.user.username}}">
                                     <span class="userNameMedium">{{request.user.name}}</span>
                                 </a>
-                                <span ng-if="(request.user.gender | genderFilter) == 'Female'" class="femaleGender gender"></span>
-                                <span ng-if="(request.user.gender | genderFilter) == 'Male'" class="maleGender gender"></span>
-                                <span ng-if="(request.user.gender | genderFilter) == 'Other'" class="otherGender gender"></span>
+                                <span ng-if="(request.user.gender | genderFilter) == 'Female'"
+                                      class="femaleGender gender"></span>
+                                <span ng-if="(request.user.gender | genderFilter) == 'Male'"
+                                      class="maleGender gender"></span>
+                                <span ng-if="(request.user.gender | genderFilter) == 'Other'"
+                                      class="otherGender gender"></span>
                             </div>
                             <div class="friendRequestOptionButtons">
-                                <button ng-click="approveFriendRequest(request.id)" class="btn btn-success btnRequest">
+                                <button ng-click="approveFriendRequest(request)" class="btn btn-success btnRequest">
                                     Approve
                                 </button>
                                 <button ng-click="rejectFriendRequest(request.id)" class="btn btn-danger btnRequest">
@@ -63,11 +66,13 @@
                             <span class="glyphicon glyphicon-search search-icon"></span>
                         </button>
                         <ul class="searchList clearfix" ng-if="term.length">
-                            <li class="listElementLarge listElementMedium col-lg-12" ng-repeat="foundUser in searchResult">
+                            <li class="listElementLarge listElementMedium col-lg-12"
+                                ng-repeat="foundUser in searchResult">
                                 <div class="pull-left">
-                                    <a href="#/users/{{foundUser.username}}">
-                                        <img class="userImageSmall" ng-src="{{foundUser.profileImageData}}"/>
-                                    </a>
+                                    <img class="userImageSmall hover-box"
+                                         popup-show="templates/partial/user-preview.html"
+                                         ng-click="getUserPreviewData(foundUser.username)"
+                                         ng-src="{{foundUser.profileImageData}}"/>
                                 </div>
                                 <div class="mediumsSection">
                                     <div>
@@ -82,7 +87,8 @@
                                 </div>
                             </li>
                             <li ng-if="!searchResult.length" class="largeSection col-lg-12">
-                                <p class="userNameLarge col-lg-12">No results found with <span class="important">{{term}}</span></p>
+                                <p class="userNameLarge col-lg-12">No results found with <span class="important">{{term}}</span>
+                                </p>
                             </li>
                         </ul>
                     </form>

@@ -1,6 +1,7 @@
 ﻿namespace SocialNetwork.Services.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -14,6 +15,7 @@
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Testing;
     using Models.BindingModels;
+    using Models.BindingModels.User;
     using SocialNetwork.Models;
     using UserSessionUtils;
 
@@ -32,23 +34,70 @@
             : base(data, userIdProvider)
         {
             this.userManager = new ApplicationUserManager(
-               new UserStore<ApplicationUser>(new SocialNetworkContext()));
+                new UserStore<ApplicationUser>(new SocialNetworkContext()));
         }
 
         public ApplicationUserManager UserManager
         {
-            get
-            {
-                return this.userManager;
-            }
+            get { return this.userManager; }
         }
 
         private IAuthenticationManager Authentication
         {
-            get
+            get { return this.Request.GetOwinContext().Authentication; }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Register")]
+        public async Task<IHttpActionResult> RegisterUser(RegisterUserBindingModel bindingModel)
+        {
+            if (this.UserIdProvider.GetUserId() != null)
             {
-                return this.Request.GetOwinContext().Authentication;
+                return this.BadRequest("User is already logged in.");
             }
+
+            if (bindingModel == null)
+            {
+                return this.BadRequest("Invalid user data");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var existingEmail = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.Email == bindingModel.Email);
+            if (existingEmail != null)
+            {
+                return this.BadRequest("A user with the same email already exists.");
+            }
+
+            var newUser = new ApplicationUser
+            {
+                UserName = bindingModel.Username,
+                Name = bindingModel.Name,
+                Email = bindingModel.Email,
+                Age = bindingModel.Age,
+                Gender = bindingModel.Gender
+            };
+
+            var identityResult = await this.UserManager.CreateAsync(newUser, bindingModel.Password);
+            if (!identityResult.Succeeded)
+            {
+                return this.GetErrorResult(identityResult);
+            }
+
+            var loginResult = await this.LoginUser(new LoginUserBindingModel
+            {
+                Username = bindingModel.Username,
+                Password = bindingModel.Password
+            });
+
+            return loginResult;
         }
 
         [HttpPost]
@@ -85,12 +134,25 @@
                 var username = responseData["userName"];
                 var owinContext = this.Request.GetOwinContext();
                 var userSessionManager = new UserSessionManager(owinContext);
-                
+
                 userSessionManager.CreateUserSession(username, authenticationToken);
                 userSessionManager.DeleteExpiredSession();
             }
 
             return this.ResponseMessage(tokenServiceResponse);
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public IHttpActionResult Logout()
+        {
+            this.Authentication.SignOut(DefaultAuthenticationTypes.ExternalBearer);
+            var owinContext = this.Request.GetOwinContext();
+            var userSessionManager = new UserSessionManager(owinContext);
+
+            userSessionManager.InvalidateUserSession();
+
+            return this.Ok("Logout successful");
         }
     }
 }

@@ -72,6 +72,10 @@
     font-family: usernameFont, sans-serif;
 }
 
+.hover-box:hover{
+    cursor: pointer;
+}
+
 .post-image, .post-info{
     display: inline-block;
     margin-left: 8px;
@@ -87,15 +91,6 @@ img.mini-thumbnail {
     margin: 10px 0 0 5px;
     padding: 0 1%;
     font-family: "Ubuntu", Tahoma, "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.hover-box {
-    position: absolute;
-    background-color: #F5F5F5;
-    border: solid 1px #E3E3E3;
-    padding: 5px;
-    box-shadow: 1px 1px 1px 1px gray;
-    display: none;
 }
 
 .comments{

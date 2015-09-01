@@ -1,5 +1,5 @@
 <section ng-init="getFriendFriendsPreview()">
-    <div class="friendFriendsBox well bs-component">
+    <div class="friendsBox well bs-component">
         <div class="friendsCount">
             <a class="friendsCountLink" href="#/users/{{userFullData.username}}/friends/">
                 <p class="friendsTitle">Friends - </p>
@@ -8,11 +8,16 @@
         </div>
         <ul class="friendsBoxList">
             <li class="friendBoxPreviewElement" ng-repeat="friend in friendFriendsPreview.friends">
+                    <img class="friendBoxPreviewImage hover-box"
+                         popup-show="templates/partial/user-preview.html"
+                         ng-click="getUserPreviewData(friend.username)"
+                         ng-src="{{friend.profileImageData}}"/>
                 <a href="#/users/{{friend.username}}/" class="friendsBoxPreview">
-                    <img class="friendBoxPreviewImage" ng-src="{{friend.profileImageData}}"/>
                     <div class="friendName">{{friend.name}}</div>
                 </a>
             </li>
         </ul>
     </div>
 </section>
+
+<!--user-preview user-username="friend.username" user-name="friend.name"-->

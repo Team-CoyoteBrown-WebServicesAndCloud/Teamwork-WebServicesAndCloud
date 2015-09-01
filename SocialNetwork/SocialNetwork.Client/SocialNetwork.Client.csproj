@@ -264,6 +264,7 @@
     <Content Include="libs\angular-1.3.15\docs\examples\example-time-input-directive\manifest.json" />
     <Content Include="libs\angular-1.3.15\docs\examples\example-url-input-directive\manifest.json" />
     <Content Include="libs\angular-1.3.15\docs\examples\example-week-input-directive\manifest.json" />
+    <Content Include="libs\angular-1.3.15\docs\img\guide\Thumbs.db" />
     <Content Include="libs\angular-1.3.15\docs\img\tutorial\tutorial_05.pptx" />
     <Content Include="libs\angular-1.3.15\docs\js\angular-bootstrap\bootstrap.min.js.map" />
     <Content Include="libs\angular-1.3.15\docs\js\angular-bootstrap\dropdown-toggle.min.js.map" />
@@ -283,6 +284,7 @@
     <Content Include="libs\angular-ngStorage\LICENSE" />
     <Content Include="libs\angular-ngStorage\package.json" />
     <Content Include="libs\angular-ngStorage\README.md" />
+    <Content Include="libs\angular-spinner.min.js.map" />
     <Content Include="libs\bootstrap-3.3.4-dist\css\bootstrap-theme.css.map" />
     <Content Include="libs\bootstrap-3.3.4-dist\css\bootstrap.css.map" />
     <Content Include="libs\bootstrap-3.3.4-dist\fonts\glyphicons-halflings-regular.eot" />
@@ -293,6 +295,7 @@
     <Content Include="resourses\fonts\Panton-LightitalicCaps.otf" />
     <Content Include="resourses\fonts\rafale_bg-webfont.ttf" />
     <Content Include="resourses\images\Thumbs.db" />
+    <Content Include="resourses\Thumbs.db" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -302,6 +305,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="index.html" />
+    <Content Include="scripts\app.js" />
+    <Content Include="scripts\controller\AuthenticationController.js" />
+    <Content Include="scripts\controller\MainController.js" />
+    <Content Include="scripts\controller\PostController.js" />
+    <Content Include="scripts\controller\UserController.js" />
+    <Content Include="scripts\filters\genderFilter.js" />
+    <Content Include="scripts\services\authenticationService.js" />
+    <Content Include="scripts\services\notifyService.js" />
+    <Content Include="scripts\services\postService.js" />
+    <Content Include="scripts\services\userService.js" />
     <Content Include="libs\angular-1.3.15\angular-animate.js" />
     <Content Include="libs\angular-1.3.15\angular-animate.min.js" />
     <Content Include="libs\angular-1.3.15\angular-aria.js" />
@@ -2523,6 +2536,9 @@
     <Content Include="libs\angular-ngStorage\ngStorage.min.js" />
     <Content Include="libs\angular-ngStorage\package.js" />
     <Content Include="libs\angular-ngStorage\test\spec.js" />
+    <Content Include="libs\angular-rt-popup.js" />
+    <Content Include="libs\angular-rt-popup.min.js" />
+    <Content Include="libs\angular-spinner.min.js" />
     <Content Include="libs\bootstrap-3.3.4-dist\css\bootstrap-theme.css" />
     <Content Include="libs\bootstrap-3.3.4-dist\css\bootstrap-theme.min.css" />
     <Content Include="libs\bootstrap-3.3.4-dist\css\bootstrap.css" />
@@ -2533,6 +2549,8 @@
     <Content Include="libs\bootstrap-3.3.4-dist\js\npm.js" />
     <Content Include="libs\jquery-2.1.3.min.js" />
     <Content Include="libs\jquery.noty.packaged.js" />
+    <Content Include="libs\ng-infinite-scroll.js" />
+    <Content Include="libs\spin.js" />
     <Content Include="resourses\images\change-password.png" />
     <Content Include="resourses\images\comment-icon.png" />
     <Content Include="resourses\images\cover.jpg" />
@@ -2548,23 +2566,13 @@
     <Content Include="resourses\images\home-screen.jpg" />
     <Content Include="resourses\images\like-button.png" />
     <Content Include="resourses\images\like-button3.png" />
+    <Content Include="resourses\images\logo.png" />
     <Content Include="resourses\images\logout.png" />
     <Content Include="resourses\images\male-symbol.png" />
     <Content Include="resourses\images\news-feed.png" />
     <Content Include="resourses\images\other-symbol.png" />
     <Content Include="resourses\images\Presbo.jpg" />
     <Content Include="resourses\images\unlike-button.png" />
-    <Content Include="scripts\app.js" />
-    <Content Include="scripts\controller\AuthenticationController.js" />
-    <Content Include="scripts\controller\MainController.js" />
-    <Content Include="scripts\controller\PostController.js" />
-    <Content Include="scripts\controller\UserController.js" />
-    <Content Include="scripts\directives\login.js" />
-    <Content Include="scripts\filters\genderFilter.js" />
-    <Content Include="scripts\services\authenticationService.js" />
-    <Content Include="scripts\services\notifyService.js" />
-    <Content Include="scripts\services\postService.js" />
-    <Content Include="scripts\services\userService.js" />
     <Content Include="styles\friend-section.css" />
     <Content Include="styles\friends-box.css" />
     <Content Include="styles\main-styles.css" />
@@ -2573,13 +2581,13 @@
     <Content Include="templates\friend-requests.html" />
     <Content Include="templates\home.html" />
     <Content Include="templates\login.html" />
-    <Content Include="templates\news-feed.html" />
     <Content Include="templates\partial\friend-friends-preview.html" />
     <Content Include="templates\partial\friends-preview.html" />
-    <Content Include="templates\partial\hover-box.html" />
     <Content Include="templates\partial\navbar-header.html" />
+    <Content Include="templates\partial\news-feed.html" />
     <Content Include="templates\partial\post-container.html" />
     <Content Include="templates\partial\posts.html" />
+    <Content Include="templates\partial\user-preview.html" />
     <Content Include="templates\partial\user-wall-header.html" />
     <Content Include="templates\register.html" />
     <Content Include="templates\user\all-own-friends.html" />

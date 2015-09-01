@@ -15,5 +15,5 @@ app.controller('MainController', ['$scope', 'authenticationService', function ($
         }
 
         return usersData;
-    }
+    };
 }]);

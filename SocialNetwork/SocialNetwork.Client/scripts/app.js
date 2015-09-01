@@ -1,8 +1,12 @@
 'use strict';
 
-var app = angular.module('socialNetworkApp', ['ngRoute', 'ngResource', 'naif.base64', 'ngStorage']);
+var app = angular.module('socialNetworkApp', ['ngRoute', 'ngResource', 'naif.base64', 'ngStorage', 'angularSpinner', 'rt.popup', 'infinite-scroll']);
 
-app.constant('baseServiceUrl', 'http://localhost:52209/api');
+app.constant({
+    'baseServiceUrl': 'http://localhost:52209/api',
+    'pageSize': 5
+});
+
 
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
@@ -24,7 +28,7 @@ app.config(['$routeProvider', function ($routeProvider) {
         })
         .when('/profile/edit-profile', {
             templateUrl: 'templates/user/edit-profile.html',
-            controller: 'MainController'
+            controller: 'MainController',
         })
         .when('/profile/change-password', {
             templateUrl: 'templates/user/change-password.html',
@@ -51,9 +55,18 @@ app.config(['$routeProvider', function ($routeProvider) {
         });
 }]);
 
-app.run(function ($rootScope, $location, authenticationService) {
+app.run(function ($rootScope, $location, authenticationService, notifyService) {
     $rootScope.$on('$locationChangeStart', function (event) {
-        if ($location.path().indexOf("/user/") != -1 && !authenticationService.isLoggedIn()) {
+        var isRegisterPage = $location.path().indexOf('/register') == -1,
+            isLoginPage = $location.path().indexOf('/login') == -1,
+            isHomePage = $location.path().indexOf('/') > -1 && $location.path().length == 1,
+            isLoggedIn = authenticationService.isLoggedIn();
+
+        if (!isLoggedIn && (!isHomePage && isRegisterPage && isLoginPage)) {
+            notifyService.showError('Login or register first');
+            $location.path("/");
+        } else if (isLoggedIn && (!isRegisterPage || !isLoginPage)) {
+            notifyService.showError("Can't go there. Logout first.");
             $location.path("/");
         }
     });

@@ -10,39 +10,47 @@
                             <label for="name" class="col-lg-2 control-label">Name:</label>
 
                             <div class="col-lg-10">
-                                <input type="text" class="form-control" id="name" placeholder="Name"
-                                       ng-model="userData.name">
+                                <input type="text" class="form-control" id="name" placeholder="Name" ng-model="userData.name">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail" class="col-lg-2 control-label">Email:</label>
 
                             <div class="col-lg-10">
-                                <input type="text" class="form-control" id="inputEmail" placeholder="Email"
-                                       ng-model="userData.email">
+                                <input type="text" class="form-control" id="inputEmail" placeholder="Email" ng-model="userData.email">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Radios</label>
-
                             <div class="col-lg-10">
                                 <div class="radio">
                                     <label class="radio-option">
-                                        <input type="radio" name="gender" id="gender-male" class="radio-input"
+                                        <input type="radio" name="gender"
+                                               id="gender-male"
+                                               class="radio-input"
                                                value="male"
-                                               ng-model="userData.gender">
+                                               ng-model="userData.gender"
+                                               ng-value="1">
                                         Male
                                     </label>
                                     <label class="radio-option">
-                                        <input type="radio" name="gender" id="gender-female" class="radio-input"
+                                        <input type="radio"
+                                               name="gender"
+                                               id="gender-female"
+                                               class="radio-input"
                                                value="female"
-                                               ng-model="userData.gender">
+                                               ng-model="userData.gender"
+                                               ng-value="2">
                                         Female
                                     </label>
                                     <label class="radio-option">
-                                        <input type="radio" name="gender" id="gender-other" class="radio-input"
+                                        <input type="radio"
+                                               name="gender"
+                                               id="gender-other"
+                                               class="radio-input"
                                                value="other"
-                                               ng-model="userData.gender">
+                                               ng-model="userData.gender"
+                                               ng-value="0">
                                         Other
                                     </label>
                                 </div>

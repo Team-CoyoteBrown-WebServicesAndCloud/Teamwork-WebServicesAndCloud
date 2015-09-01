@@ -7,8 +7,8 @@ app.factory('notifyService',
                 noty({
                         text: msg,
                         type: 'success',
-                        layout: 'topCenter',
-                        timeout: 1500}
+                        layout: 'bottomLeft',
+                        timeout: 2500}
                 );
             },
             showError: function(msg, serverError) {
@@ -35,7 +35,7 @@ app.factory('notifyService',
                 noty({
                         text: msg,
                         type: 'error',
-                        layout: 'topCenter',
+                        layout: 'bottomLeft',
                         timeout: 3000}
                 );
             }
