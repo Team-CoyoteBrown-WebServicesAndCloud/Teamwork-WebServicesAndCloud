@@ -1,0 +1,6 @@
+C:\Users\Jinjaar-pc\Documents\Teamwork\Teamwork-WebServicesAndCloud\SocialNetwork\SocialNetwork.Client\bin\SocialNetwork.Client.dll.config
+C:\Users\Jinjaar-pc\Documents\Teamwork\Teamwork-WebServicesAndCloud\SocialNetwork\SocialNetwork.Client\bin\SocialNetwork.Client.dll
+C:\Users\Jinjaar-pc\Documents\Teamwork\Teamwork-WebServicesAndCloud\SocialNetwork\SocialNetwork.Client\bin\SocialNetwork.Client.pdb
+C:\Users\Jinjaar-pc\Documents\Teamwork\Teamwork-WebServicesAndCloud\SocialNetwork\SocialNetwork.Client\obj\Debug\SocialNetwork.Client.csprojResolveAssemblyReference.cache
+C:\Users\Jinjaar-pc\Documents\Teamwork\Teamwork-WebServicesAndCloud\SocialNetwork\SocialNetwork.Client\obj\Debug\SocialNetwork.Client.dll
+C:\Users\Jinjaar-pc\Documents\Teamwork\Teamwork-WebServicesAndCloud\SocialNetwork\SocialNetwork.Client\obj\Debug\SocialNetwork.Client.pdb

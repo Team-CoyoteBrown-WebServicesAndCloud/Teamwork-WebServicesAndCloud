@@ -8,7 +8,7 @@
 
     public class BaseApiController : ApiController
     {
-        public BaseApiController()
+        public BaseApiController(ISocialNetworkData data)
             : this(new SocialNetworkData(), new AspNetUserIdProvider())
         {
         }
