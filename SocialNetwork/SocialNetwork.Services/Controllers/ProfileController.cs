@@ -104,5 +104,65 @@
 
             return this.Ok(requests);
         }
+
+        [HttpGet]
+        [Route("feed")]
+        public IHttpActionResult GetNewsFeed(int postsCount, int startPostNumber)
+        {
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+
+            var user = this.Data.Users.Find(currentUserId);
+            var posts = user.Friends.Select(f => f.OwnPosts).Skip(startPostNumber).Take(postsCount);
+
+            return this.Ok(posts.Count());
+        }
+
+        [HttpPut]
+        [Route("requests/approve")]
+        public IHttpActionResult ApproveFriendRequest(int id)
+        {
+            var currentUserId = this.UserIdProvider.GetUserId();
+
+            var user = this.Data.Users.Find(currentUserId);
+
+            var friendId = user.FriendRequests
+                .Where(c => c.Id == id)
+                .Select(c => c.FromUserId)
+                .FirstOrDefault();
+            var friend = this.Data.Users.Find(friendId);
+
+            var request = user.FriendRequests.FirstOrDefault(c => c.Id == id);
+            request.FriendRequestStatus = FriendRequestStatus.Approved;
+
+            user.Friends.Add(friend);
+            this.Data.SaveChanges();
+            return this.Ok();
+
+        }
+        [HttpPut]
+        [Route("requests/reject")]
+        public IHttpActionResult RejectFriendRequest(int id)
+        {
+            var currentUserId = this.UserIdProvider.GetUserId();
+
+            var user = this.Data.Users.Find(currentUserId);
+
+            var request = user.FriendRequests.FirstOrDefault(c => c.Id == id);
+            request.FriendRequestStatus = FriendRequestStatus.Declined;
+
+            this.Data.Users.Update(user);
+            this.Data.SaveChanges();
+            return this.Ok();
+
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public IHttpActionResult SearchUsers(string searchTerm)
+        {
+            var users = this.Data.Users.All().Where(c => c.Name.Contains(searchTerm));
+            return this.Ok(users);
+        }
     }
 }
