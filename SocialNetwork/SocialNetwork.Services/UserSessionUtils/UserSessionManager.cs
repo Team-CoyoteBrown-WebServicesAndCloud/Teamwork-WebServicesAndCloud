@@ -6,8 +6,7 @@
     using Data.Interfaces;
     using Microsoft.AspNet.Identity;
     using Microsoft.Owin;
-    using SocialNetwork.Models;
-    using Microsoft.Owin;
+    using SocialNetwork.Models;   
 
     public class UserSessionManager
     {
