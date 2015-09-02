@@ -229,6 +229,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BindingModels\Post\AddNewPostBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\BasePostBindingModel.cs" />
+    <Compile Include="Models\BindingModels\Post\DeletePostBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\EditPostBindingModel.cs" />
     <Compile Include="Models\BindingModels\User\EditProfileBindingModel.cs" />
     <Compile Include="Models\BindingModels\User\FriendPreviewBindingModel.cs" />

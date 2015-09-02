@@ -6,6 +6,8 @@ namespace SocialNetwork.Services.Models.BindingModels.Post
 
     public class BasePostBindingModel
     {
+        public int Id { get; set; }
+
         [Required]
         public string Content { get; set; }
 

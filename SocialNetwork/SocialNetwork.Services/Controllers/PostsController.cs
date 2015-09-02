@@ -73,12 +73,52 @@
             return this.Ok("Posted successfuly");
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[Route("EditPost")]
-        //public IHttpActionResult EditPost(EditPostBindingModel model)
-        //{
+        [HttpDelete]
+        [AllowAnonymous]
+        [Route("DeletePost")]
 
-        //}
+        public IHttpActionResult DeletePost(DeletePostBindingModel model)
+        {
+            if (model == null)
+            {
+                return this.BadRequest("Invalid data!");
+            }
+
+            var existingAuthor = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.Id == model.AuthorId);
+
+            if (existingAuthor == null)
+            {
+                return this.BadRequest("No such author!");
+            }
+
+            var existingWallOwner = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.Id == model.WallOwnerId);
+
+            var post = this.Data
+                .Posts
+                .All()
+                .FirstOrDefault(p=> p.Id == model.Id);
+
+            if (existingWallOwner == null)
+            {
+                return this.BadRequest("No such wall owner!");
+            }
+
+            if (post.AuthorId != model.AuthorId || post.WallOwnerId != model.WallOwnerId)
+            {
+                return this.BadRequest("You are not the author or the wall owner of this post!");
+            }
+
+            Data.Posts.Delete(post);
+            Data.SaveChanges();
+            return this.Ok("Post deleted !");
+        }
+
+
     }
 }
