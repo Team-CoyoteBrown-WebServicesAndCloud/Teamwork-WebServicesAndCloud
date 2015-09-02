@@ -119,6 +119,101 @@
             return this.Ok("Post deleted !");
         }
 
+        [HttpPut]
+        [AllowAnonymous]
+        [Route("EditPost")]
+        public IHttpActionResult EditPost(EditPostBindingModel model)
+        {
+            if (model == null)
+            {
+                return this.BadRequest("Invalid data!");
+            }
 
+            var post = this.Data
+                .Posts
+                .All()
+                .FirstOrDefault(p => p.Id == model.Id);
+
+            if (post == null)
+            {
+                return this.BadRequest("No such post!");
+            }
+
+            if (post.AuthorId != model.AuthorId)
+            {
+                return this.BadRequest("You are not the author and can not change the post!");
+            }
+
+            post.Content = model.Content;
+
+            Data.SaveChanges();
+
+            return this.Ok("Post content has been changed.");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("AddNewComment")]
+        public IHttpActionResult AddNewComment(CommentBindingModel model)
+        {
+            if (model == null)
+            {
+                return this.BadRequest("Invalid data!");
+            }
+
+            var post = this.Data
+                .Posts
+                .All()
+                .FirstOrDefault(p => p.Id == model.PostId);
+
+            if (post == null)
+            {
+                return this.BadRequest("No such post!");
+            }
+
+            var comment = new Comment()
+            {
+                Content = model.Content,
+                PostedOn = model.PostedOn,
+                PostId = model.PostId,
+                AuthorId = model.AuthorId
+            };
+
+            Data.Comments.Add(comment);
+            Data.SaveChanges();
+
+            return this.Ok("Comment has been added.");
+        }
+
+        [HttpPut]
+        [AllowAnonymous]
+        [Route("EditComment")]
+        public IHttpActionResult EditComment(CommentBindingModel model)
+        {
+            if (model == null)
+            {
+                return this.BadRequest("Invalid data!");
+            }
+
+            var comment = this.Data
+                   .Comments
+                   .All()
+                   .FirstOrDefault(c => c.Id == model.Id);
+
+            if (comment == null)
+            {
+                return this.BadRequest("No such comment!");
+            }
+
+            if (comment.AuthorId != model.AuthorId)
+            {
+                return this.BadRequest("You have not authored this comment!");
+            }
+
+            comment.Content = model.Content;
+            Data.SaveChanges();
+
+            return this.Ok("Changes saved.");
+        }
     }
 }
