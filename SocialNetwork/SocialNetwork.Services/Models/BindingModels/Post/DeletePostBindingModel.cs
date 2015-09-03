@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-
-namespace SocialNetwork.Services.Models.BindingModels.Post
+﻿namespace SocialNetwork.Services.Models.BindingModels.Post
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class DeletePostBindingModel
     {
         [Required]

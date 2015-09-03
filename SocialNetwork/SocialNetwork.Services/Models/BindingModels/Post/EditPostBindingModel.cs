@@ -1,8 +1,10 @@
-﻿
-namespace SocialNetwork.Services.Models.BindingModels.Post
+﻿namespace SocialNetwork.Services.Models.BindingModels.Post
 {
-    public class EditPostBindingModel : BasePostBindingModel
-    {
+    using System.ComponentModel.DataAnnotations;
 
+    public class EditPostBindingModel
+    {
+        [Required]
+        public string Content { get; set; }
     }
 }

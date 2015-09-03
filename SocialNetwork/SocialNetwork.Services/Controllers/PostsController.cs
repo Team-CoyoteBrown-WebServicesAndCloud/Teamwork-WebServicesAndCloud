@@ -1,14 +1,17 @@
 ﻿namespace SocialNetwork.Services.Controllers
 {
+    using System;
+    using System.Linq;
     using System.Web.Http;
+    using Data.Data;
     using Data.Interfaces;
     using Infrastructure;
-    using UserSessionUtils;
-    using SocialNetwork.Services.Models.BindingModels.Post;
+    using Models.BindingModels.Comments;
+    using Models.BindingModels.Post;
+    using Models.ViewModels.Comments;
+    using Models.ViewModels.Post;
     using SocialNetwork.Models;
-    using System.Threading.Tasks;
-    using System.Linq;
-    using SocialNetwork.Data.Data;
+    using UserSessionUtils;
 
     [SessionAuthorize]
     [RoutePrefix("api/Posts")]
@@ -19,11 +22,6 @@
         {
         }
 
-        public PostsController(ISocialNetworkData data)
-            : base(data)
-        {
-        }
-
         public PostsController(ISocialNetworkData data, IUserIdProvider userIdProvider)
             : base(data, userIdProvider)
         {
@@ -31,189 +29,220 @@
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("AddNewPost")]
-        public IHttpActionResult AddNewPost(AddNewPostBindingModel model)
+        [Route]
+        public IHttpActionResult AddPost(AddNewPostBindingModel bindingModel)
         {
-            if (model == null)
+            if (bindingModel == null)
             {
                 return this.BadRequest("Invalid data!");
             }
 
-            var existingAuthor = this.Data
-                .Users
-                .All()
-                .FirstOrDefault(u => u.Id == model.AuthorId);
-
-            if (existingAuthor == null)
+            if (!this.ModelState.IsValid)
             {
-                return this.BadRequest("No such author!");
+                return this.BadRequest(this.ModelState);
             }
 
             var existingWallOwner = this.Data
                 .Users
                 .All()
-                .FirstOrDefault(u => u.Id == model.WallOwnerId);           
-
+                .FirstOrDefault(u => u.UserName == bindingModel.Username);           
             if (existingWallOwner == null)
             {
-                return this.BadRequest("No such wall owner!");
+                return this.BadRequest("No such user!");
+            }
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+            if ((!currentUser.Friends.Contains(existingWallOwner)) && (currentUserId != existingWallOwner.Id))
+            {
+                return this.BadRequest("You have no permissions to make this post.");
             }
 
             var post = new Post()
-                        {
-                            Content = model.Content,
-                            PostedOn = model.PostedOn,
-                            AuthorId = model.AuthorId,
-                            WallOwnerId = model.WallOwnerId
-                        };
+            {
+                Content = bindingModel.Content,
+                PostedOn = DateTime.Now,
+                AuthorId = currentUserId,
+                WallOwnerId = existingWallOwner.Id
+            };
 
-            Data.Posts.Add(post);
+            this.Data.Posts.Add(post);
+            this.Data.SaveChanges();
+
+            var postViewModel = AddPostViewModel.Create(post, currentUser);
+            
+            return this.Ok(postViewModel);
+        }
+
+        [HttpPut]
+        [AllowAnonymous]
+        [Route("{postId}")]
+        public IHttpActionResult EditPost(EditPostBindingModel bindingModel, int postId)
+        {
+            if (bindingModel == null)
+            {
+                return this.BadRequest("Invalid data!");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            if (post.AuthorId != currentUserId)
+            {
+                return this.BadRequest("You have no permissions to edit this post.");
+            }
+
+            post.Content = bindingModel.Content;
+
             Data.SaveChanges();
 
-            return this.Ok("Posted successfuly");
+            return this.Ok();
         }
 
         [HttpDelete]
         [AllowAnonymous]
-        [Route("DeletePost")]
+        [Route("{postId}")]
 
-        public IHttpActionResult DeletePost(DeletePostBindingModel model)
+        public IHttpActionResult DeletePost(int postId)
         {
-            if (model == null)
-            {
-                return this.BadRequest("Invalid data!");
-            }
-
-            var existingAuthor = this.Data
-                .Users
-                .All()
-                .FirstOrDefault(u => u.Id == model.AuthorId);
-
-            if (existingAuthor == null)
-            {
-                return this.BadRequest("No such author!");
-            }
-
-            var existingWallOwner = this.Data
-                .Users
-                .All()
-                .FirstOrDefault(u => u.Id == model.WallOwnerId);
-
-            var post = this.Data
-                .Posts
-                .All()
-                .FirstOrDefault(p=> p.Id == model.Id);
-
-            if (existingWallOwner == null)
-            {
-                return this.BadRequest("No such wall owner!");
-            }
-
-            if (post.AuthorId != model.AuthorId || post.WallOwnerId != model.WallOwnerId)
-            {
-                return this.BadRequest("You are not the author or the wall owner of this post!");
-            }
-
-            Data.Posts.Delete(post);
-            Data.SaveChanges();
-            return this.Ok("Post deleted !");
-        }
-
-        [HttpPut]
-        [AllowAnonymous]
-        [Route("EditPost")]
-        public IHttpActionResult EditPost(EditPostBindingModel model)
-        {
-            if (model == null)
-            {
-                return this.BadRequest("Invalid data!");
-            }
-
-            var post = this.Data
-                .Posts
-                .All()
-                .FirstOrDefault(p => p.Id == model.Id);
-
+            var post = this.Data.Posts.Find(postId);
             if (post == null)
             {
                 return this.BadRequest("No such post!");
             }
 
-            if (post.AuthorId != model.AuthorId)
+            var currentUserId = this.UserIdProvider.GetUserId();
+            if (post.AuthorId != currentUserId && post.WallOwnerId != currentUserId)
             {
-                return this.BadRequest("You are not the author and can not change the post!");
+                return this.BadRequest("You have no permissions to delete this post.");
             }
 
-            post.Content = model.Content;
-
-            Data.SaveChanges();
-
-            return this.Ok("Post content has been changed.");
+            this.Data.Posts.Delete(post);
+            this.Data.SaveChanges();
+            
+            return this.Ok();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("AddNewComment")]
-        public IHttpActionResult AddNewComment(CommentBindingModel model)
+        [Route("{postId}/comments")]
+        public IHttpActionResult AddNewComment(AddCommentBindingModel bindingModel, int postId)
         {
-            if (model == null)
+            if (bindingModel == null)
             {
                 return this.BadRequest("Invalid data!");
             }
 
-            var post = this.Data
-                .Posts
-                .All()
-                .FirstOrDefault(p => p.Id == model.PostId);
-
-            if (post == null)
+            if (!this.ModelState.IsValid)
             {
-                return this.BadRequest("No such post!");
+                return this.BadRequest(this.ModelState);
             }
 
-            var comment = new Comment()
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
             {
-                Content = model.Content,
-                PostedOn = model.PostedOn,
-                PostId = model.PostId,
-                AuthorId = model.AuthorId
+                return this.NotFound();
+            }
+
+            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            {
+                return this.BadRequest("Unable to post comment. You can comment only on your friend's posts or post made on their wall.");
+            }
+
+            Comment comment = new Comment
+            {
+                Content = bindingModel.CommentContent,
+                PostedOn = DateTime.Now,
+                PostId = postId,
+                AuthorId = currentUserId
             };
 
-            Data.Comments.Add(comment);
-            Data.SaveChanges();
+            post.Comments.Add(comment);
+            this.Data.SaveChanges();
 
-            return this.Ok("Comment has been added.");
+            var commentViewModel = CommentViewModel.Create(comment, currentUser);
+
+            return this.Ok(commentViewModel);
         }
 
         [HttpPut]
         [AllowAnonymous]
-        [Route("EditComment")]
-        public IHttpActionResult EditComment(CommentBindingModel model)
+        [Route("{postId}/comments/{commentId}")]
+        public IHttpActionResult EditComment(AddCommentBindingModel bindingModel, int postId, int commentId)
         {
-            if (model == null)
+            if (bindingModel == null)
             {
                 return this.BadRequest("Invalid data!");
             }
 
-            var comment = this.Data
-                   .Comments
-                   .All()
-                   .FirstOrDefault(c => c.Id == model.Id);
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
 
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            var comment = this.Data.Comments.Find(commentId);
             if (comment == null)
             {
-                return this.BadRequest("No such comment!");
+                return this.NotFound();
             }
 
-            if (comment.AuthorId != model.AuthorId)
+            var currentUserId = this.UserIdProvider.GetUserId();
+            if (comment.AuthorId != currentUserId)
             {
-                return this.BadRequest("You have not authored this comment!");
+                return this.BadRequest("This comment is not yours! You have no permission to edit it.");
             }
 
-            comment.Content = model.Content;
+            comment.Content = bindingModel.CommentContent;
             Data.SaveChanges();
 
-            return this.Ok("Changes saved.");
+            return this.Ok();
+        }
+
+        [HttpDelete]
+        [AllowAnonymous]
+        [Route("{postId}/comments/{commentId}")]
+        public IHttpActionResult DeleteComment(int postId, int commentId)
+        {
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            var comment = this.Data.Comments.Find(commentId);
+            if (comment == null)
+            {
+                return this.NotFound();
+            }
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            if (comment.AuthorId != currentUserId && comment.Post.WallOwnerId != currentUserId)
+            {
+                return this.BadRequest("You have no permission to delete this comment.");
+            }
+
+            post.Comments.Remove(comment);
+            this.Data.SaveChanges();
+
+            return this.Ok();
         }
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace SocialNetwork.Services.Models.ViewModels.Post
+﻿namespace SocialNetwork.Services.Models.ViewModels.Post
 {
+    using System;
+
     public class BasePostViewModel
     {
         public int Id { get; set; }
