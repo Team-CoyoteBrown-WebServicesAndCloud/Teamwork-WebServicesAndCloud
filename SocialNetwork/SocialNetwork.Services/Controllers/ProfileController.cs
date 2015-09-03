@@ -90,6 +90,48 @@
                 friends
             });
         }
+        [HttpGet]
+        [Route("friends/{username}/preview")]
+        public IHttpActionResult GetFriendsPreviewData(string username)
+        {
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var user = this.Data.Users.Find(currentUserId);
+
+            var friend = this.Data.Users.All().FirstOrDefault(c => c.UserName == username);
+
+            if (friend== null)
+            {
+                return this.NotFound();
+            }
+                
+            string userStatus;
+            if (user.Friends.Contains(friend))
+            {
+                userStatus = "friend";
+            }
+            else
+            {
+                userStatus = "invite";
+            }
+
+            bool a = friend.FriendRequests.Any(fr => fr.FromUserId == currentUserId);
+            bool b = (!user.Friends.Contains(friend));
+
+            if (friend.FriendRequests.Any(fr => fr.FromUserId == currentUserId) && (!user.Friends.Contains(friend)))
+            {
+                userStatus = "pending";
+            }
+
+            return this.Ok(new
+            {
+                Id = friend.Id,
+                Name = friend.Name,
+                Username = friend.UserName,
+                Gender = friend.Gender,
+                ProfileImageData = friend.ProfileImageData,
+                UserStatus = userStatus
+            });
+        }
 
         [HttpGet]
         [Route("requests")]
@@ -103,6 +145,22 @@
                 .Select(FriendRequestsViewModel.Create);
 
             return this.Ok(requests);
+        }
+
+        [HttpPost]
+        [Route("requests/{username}")]
+
+        public IHttpActionResult SendFriendRequests(string username)
+        {
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+
+            var user = this.Data.Users.Find(currentUserId);
+            var friend = user.Friends.FirstOrDefault(c => c.Name == username);
+            var request =
+                friend.FriendRequests.Where(r => r.FriendRequestStatus == FriendRequestStatus.AwaitingApproval)
+                    .Select(FriendRequestsViewModel.Create);
+            return this.Ok(request);
         }
 
         [HttpGet]

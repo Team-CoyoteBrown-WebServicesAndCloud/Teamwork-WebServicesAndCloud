@@ -95,7 +95,7 @@ app.factory('userService', function ($http, baseServiceUrl, $localStorage, authe
     userService.getUserPreviewData = function (username) {
         return $http({
             method: 'GET',
-            url: baseServiceUrl + '/users/' + username + '/preview',
+            url: baseServiceUrl + '/me/friends/' + username + '/preview',
             headers: authenticationService.getHeaders()
         })
     };
