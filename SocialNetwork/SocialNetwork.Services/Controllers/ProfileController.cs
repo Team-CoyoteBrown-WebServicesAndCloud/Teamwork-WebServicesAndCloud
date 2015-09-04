@@ -1,12 +1,16 @@
 ﻿namespace SocialNetwork.Services.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
     using Data.Data;
     using Data.Interfaces;
     using Infrastructure;
     using Models.BindingModels;
+    using Models.ViewModels;
+    using Models.ViewModels.Post;
     using Models.ViewModels.User;
+    using SocialNetwork.Models;
     using SocialNetwork.Models.Enum;
     using UserSessionUtils;
 
@@ -95,17 +99,16 @@
         public IHttpActionResult GetFriendsPreviewData(string username)
         {
             var currentUserId = this.UserIdProvider.GetUserId();
-            var user = this.Data.Users.Find(currentUserId);
+            var currentUser = this.Data.Users.Find(currentUserId);
 
-            var friend = this.Data.Users.All().FirstOrDefault(c => c.UserName == username);
-
-            if (friend== null)
+            var existingUser = this.Data.Users.All().FirstOrDefault(c => c.UserName == username);
+            if (existingUser== null)
             {
                 return this.NotFound();
             }
                 
             string userStatus;
-            if (user.Friends.Contains(friend))
+            if (currentUser.Friends.Contains(existingUser))
             {
                 userStatus = "friend";
             }
@@ -114,21 +117,18 @@
                 userStatus = "invite";
             }
 
-            bool a = friend.FriendRequests.Any(fr => fr.FromUserId == currentUserId);
-            bool b = (!user.Friends.Contains(friend));
-
-            if (friend.FriendRequests.Any(fr => fr.FromUserId == currentUserId) && (!user.Friends.Contains(friend)))
+            if (existingUser.FriendRequests.Any(fr => fr.FromUserId == currentUserId) && (!currentUser.Friends.Contains(existingUser)))
             {
                 userStatus = "pending";
             }
 
             return this.Ok(new
             {
-                Id = friend.Id,
-                Name = friend.Name,
-                Username = friend.UserName,
-                Gender = friend.Gender,
-                ProfileImageData = friend.ProfileImageData,
+                Id = existingUser.Id,
+                Name = existingUser.Name,
+                Username = existingUser.UserName,
+                Gender = existingUser.Gender,
+                ProfileImageData = existingUser.ProfileImageData,
                 UserStatus = userStatus
             });
         }
@@ -138,11 +138,11 @@
         public IHttpActionResult GetFriendRequests()
         {
             var currentUserId = this.UserIdProvider.GetUserId();
-
-            var user = this.Data.Users.Find(currentUserId);
-            var requests = user.FriendRequests
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var requests = currentUser.FriendRequests
+                .AsQueryable()
                 .Where(r => r.FriendRequestStatus == FriendRequestStatus.AwaitingApproval)
-                .Select(FriendRequestsViewModel.Create);
+                .Select(FriendRequestViewModel.Create);
 
             return this.Ok(requests);
         }
@@ -152,75 +152,91 @@
 
         public IHttpActionResult SendFriendRequests(string username)
         {
-
             var currentUserId = this.UserIdProvider.GetUserId();
+            var existingUser = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(c => c.Name == username);
+            if (existingUser == null)
+            {
+                return this.NotFound();
+            }
 
-            var user = this.Data.Users.Find(currentUserId);
-            var friend = user.Friends.FirstOrDefault(c => c.Name == username);
-            var request =
-                friend.FriendRequests.Where(r => r.FriendRequestStatus == FriendRequestStatus.AwaitingApproval)
-                    .Select(FriendRequestsViewModel.Create);
-            return this.Ok(request);
+            FriendRequest friendRequest = new FriendRequest
+            {
+                FriendRequestStatus = FriendRequestStatus.AwaitingApproval,
+                FromUserId = currentUserId,
+                ToUserId = existingUser.Id,
+            };
+
+            existingUser.FriendRequests.Add(friendRequest);
+            this.Data.SaveChanges();
+           
+            return this.Ok();
         }
 
         [HttpGet]
         [Route("feed")]
-        public IHttpActionResult GetNewsFeed(int postsCount, int startPostNumber)
+        public IHttpActionResult GetNewsFeed([FromUri]int postsCount, [FromUri]int startPostNumber)
         {
-
             var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
 
-            var user = this.Data.Users.Find(currentUserId);
-            var posts = user.Friends.Select(f => f.OwnPosts).Skip(startPostNumber).Take(postsCount);
+            //var posts = currentUser
+            //    .Friends
+            //    .Where(f => f.OwnPosts.Any() || f.WallPosts.Any())
+            //    .Select(f => f.OwnPosts
+            //        .Select(p => PostViewModel.Create(p, currentUser)))
+            //    .Skip(startPostNumber)
+            //    .Take(postsCount);
 
-            return this.Ok(posts.Count());
+            return this.Ok();
         }
 
         [HttpPut]
-        [Route("requests/approve")]
-        public IHttpActionResult ApproveFriendRequest(int id)
+        [Route("requests/{requestId}/approve")]
+        public IHttpActionResult ApproveFriendRequest(int requestId)
         {
             var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
 
-            var user = this.Data.Users.Find(currentUserId);
-
-            var friendId = user.FriendRequests
-                .Where(c => c.Id == id)
-                .Select(c => c.FromUserId)
+            var existingUser = currentUser.FriendRequests
+                .Where(r => r.Id == requestId)
+                .Select(c => c.FromUser)
                 .FirstOrDefault();
-            var friend = this.Data.Users.Find(friendId);
+            
+            var request = currentUser.FriendRequests.FirstOrDefault(c => c.Id == requestId);
+            if (request == null)
+            {
+                return this.NotFound();
+            }
 
-            var request = user.FriendRequests.FirstOrDefault(c => c.Id == id);
             request.FriendRequestStatus = FriendRequestStatus.Approved;
-
-            user.Friends.Add(friend);
+            currentUser.Friends.Add(existingUser);
+            
             this.Data.SaveChanges();
             return this.Ok();
 
         }
         [HttpPut]
-        [Route("requests/reject")]
-        public IHttpActionResult RejectFriendRequest(int id)
+        [Route("requests/{requestId}/reject")]
+        public IHttpActionResult RejectFriendRequest(int requestId)
         {
             var currentUserId = this.UserIdProvider.GetUserId();
-
             var user = this.Data.Users.Find(currentUserId);
 
-            var request = user.FriendRequests.FirstOrDefault(c => c.Id == id);
+            var request = user
+                .FriendRequests
+                .FirstOrDefault(c => c.Id == requestId);
+            if (request == null)
+            {
+                return this.NotFound();
+            }
+            
             request.FriendRequestStatus = FriendRequestStatus.Declined;
 
-            this.Data.Users.Update(user);
             this.Data.SaveChanges();
             return this.Ok();
-
-        }
-
-        [HttpGet]
-        [Route("search")]
-        public IHttpActionResult SearchUsers(string searchTerm)
-        {
-            var users = this.Data.Users.All().Where(c => c.Name.Contains(searchTerm));
-            return this.Ok(users);
         }
     }
 }

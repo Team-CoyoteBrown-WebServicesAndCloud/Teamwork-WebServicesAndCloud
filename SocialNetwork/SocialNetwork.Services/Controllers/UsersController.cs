@@ -16,6 +16,7 @@
     using Microsoft.Owin.Testing;
     using Models.BindingModels;
     using Models.BindingModels.User;
+    using Models.ViewModels.User;
     using SocialNetwork.Models;
     using UserSessionUtils;
 
@@ -153,6 +154,22 @@
             userSessionManager.InvalidateUserSession();
 
             return this.Ok("Logout successful");
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public IHttpActionResult SearchUsers([FromUri] SearchBindingModel bindingModel)
+        {
+            var users = this.Data
+                .Users
+                .All()
+                .OrderBy(u => u.Name)
+                .ThenBy(u => u.UserName)
+                .Where(u => u.Name.Contains(bindingModel.SearchWord))
+                .Take(5)
+                .Select(UserViewModelMinified.Create);
+
+            return this.Ok(users);
         }
     }
 }

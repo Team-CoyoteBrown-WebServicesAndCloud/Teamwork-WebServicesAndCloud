@@ -229,6 +229,7 @@ app.controller('UserController',
             userService.getNewsFeed(pageSize, startNewsFeedPostId).then(
                 function (serverData) {
                     serverData.data.forEach(function (post) {
+                        post = post[0]
                         post.date = new Date(post.date);
                         post.author = $scope.checkForEmptyImages(post.author);
                         post.wallOwner = $scope.checkForEmptyImages(post.wallOwner);
