@@ -56,7 +56,8 @@ app.controller('PostController',
             usSpinnerService.spin('spinner-1');
             postService.addNewComment(post.commentContent, post.id).then(
                 function (serverData) {
-                    post.commentContent  = "";
+                    serverData.data.author = $scope.checkForEmptyImages(serverData.data.author);
+                    post.commentContent = "";
                     post.comments.unshift(serverData.data);
                     post.totalCommentsCount++;
                     notifyService.showInfo('Successfully added new comment');

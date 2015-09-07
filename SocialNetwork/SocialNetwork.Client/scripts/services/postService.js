@@ -43,10 +43,10 @@ app.factory('postService', function ($http, baseServiceUrl, $localStorage, authe
         })
     };
 
-    postService.addNewComment = function (commentContent, commentId) {
+    postService.addNewComment = function (commentContent, postId) {
         return $http({
             method: 'POST',
-            url: baseServiceUrl + '/posts/' + commentId + '/comments',
+            url: baseServiceUrl + '/posts/' + postId + '/comments',
             headers: authenticationService.getHeaders(),
             data: {
                 commentContent: commentContent
@@ -76,7 +76,7 @@ app.factory('postService', function ($http, baseServiceUrl, $localStorage, authe
     postService.likePost = function (postId) {
         return $http({
             method: 'POST',
-            url: baseServiceUrl + '/posts/' + postId + '/likes/',
+            url: baseServiceUrl + '/posts/' + postId + '/likes',
             headers: authenticationService.getHeaders()
         })
     };
@@ -84,7 +84,7 @@ app.factory('postService', function ($http, baseServiceUrl, $localStorage, authe
     postService.unlikePost = function (postId) {
         return $http({
             method: 'DELETE',
-            url: baseServiceUrl + '/posts/' + postId + '/likes/',
+            url: baseServiceUrl + '/posts/' + postId + '/likes',
             headers: authenticationService.getHeaders()
         })
     };
@@ -92,7 +92,7 @@ app.factory('postService', function ($http, baseServiceUrl, $localStorage, authe
     postService.likeComment = function (commentId, postId) {
         return $http({
             method: 'POST',
-            url: baseServiceUrl + '/posts/' + postId + '/comments/' + commentId + '/likes/',
+            url: baseServiceUrl + '/posts/' + postId + '/comments/' + commentId + '/likes',
             headers: authenticationService.getHeaders()
         })
     };
@@ -100,7 +100,7 @@ app.factory('postService', function ($http, baseServiceUrl, $localStorage, authe
     postService.unlikeComment = function (commentId, postId) {
         return $http({
             method: 'DELETE',
-            url: baseServiceUrl + '/posts/' + postId + '/comments/' + commentId + '/likes/',
+            url: baseServiceUrl + '/posts/' + postId + '/comments/' + commentId + '/likes',
             headers: authenticationService.getHeaders()
         })
     };
@@ -108,7 +108,7 @@ app.factory('postService', function ($http, baseServiceUrl, $localStorage, authe
     postService.getPostComments = function (postId) {
         return $http({
             method: 'GET',
-            url: baseServiceUrl + '/posts/' + postId + '/comments/',
+            url: baseServiceUrl + '/posts/' + postId + '/comments',
             headers: authenticationService.getHeaders()
         })
     };

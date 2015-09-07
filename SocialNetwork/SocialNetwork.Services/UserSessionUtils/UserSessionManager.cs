@@ -10,7 +10,7 @@
 
     public class UserSessionManager
     {
-        private static readonly TimeSpan DefaultSessionTimeout = new TimeSpan(0, 0, 30, 0);
+        private static readonly TimeSpan DefaultSessionTimeout = new TimeSpan(0, 24, 0, 0);
 
         public UserSessionManager(IOwinContext owinContext)
             : this(owinContext, new SocialNetworkData())

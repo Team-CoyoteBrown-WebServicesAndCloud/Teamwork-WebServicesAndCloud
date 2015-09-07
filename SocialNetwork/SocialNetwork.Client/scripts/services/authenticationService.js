@@ -15,6 +15,13 @@ app.factory('authenticationService', function ($http, baseServiceUrl, $localStor
         return $localStorage.currentUser != undefined;
     };
 
+    authenticationService.validateAccessToken = function (username) {
+        return $http({
+            method: 'GET',
+            url: baseServiceUrl + "/users/" + username + "/AccessToken/Validate"
+        });
+    }
+
     authenticationService.getHeaders = function () {
         return {
             Authorization: "Bearer " + $localStorage.currentUser.access_token

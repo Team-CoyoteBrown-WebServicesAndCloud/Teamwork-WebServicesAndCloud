@@ -6,11 +6,13 @@
 
     public class CommentViewModel
     {
-         public int Id { get; set; }
+        public int Id { get; set; }
 
         public UserViewModelMinified Author { get; set; }
 
         public DateTime Date { get; set; }
+
+        public string CommentContent { get; set; }
 
         public static CommentViewModel Create(Comment comment, ApplicationUser currentUser)
         {
@@ -19,6 +21,7 @@
                 Id = comment.Id,
                 Author = UserViewModelMinified.ConvertTo(comment.Author),
                 Date = comment.PostedOn,
+                CommentContent = comment.Content
             };
         }
     }

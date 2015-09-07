@@ -1,14 +1,15 @@
 app.controller('AuthenticationController',
     function ($scope, $location, $rootScope, authenticationService, notifyService, $localStorage, usSpinnerService) {
         if ($scope.isLogged) {
-            $scope.userData = function () {
+            $scope.userData = function() {
                 usSpinnerService.spin('spinner-1');
                 authenticationService.getCurrentUserData().then(
-                    function (userData) {
+                    function(userData) {
                         usSpinnerService.stop('spinner-1');
+                        $scope.userData = userData.data[0];
                         $scope.userData = $scope.checkForEmptyImages(userData.data);
                     },
-                    function (error) {
+                    function(error) {
                         notifyService.showError('Unable to get current user data. ' + error.data.message);
                         usSpinnerService.stop('spinner-1');
                     }

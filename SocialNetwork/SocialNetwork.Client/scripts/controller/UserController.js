@@ -6,6 +6,7 @@ app.controller('UserController',
             $scope.wallPosts = [];
             $scope.newsFeed = [];
             $scope.busy = false;
+            $scope.postsToSkipCount = 0;
             var startNewsFeedPostId,
                 startWallPagePostId;
         }
@@ -226,10 +227,9 @@ app.controller('UserController',
             $scope.busy = true;
 
             usSpinnerService.spin('spinner-1');
-            userService.getNewsFeed(pageSize, startNewsFeedPostId).then(
+            userService.getNewsFeed(pageSize, $scope.postsToSkipCount).then(
                 function (serverData) {
                     serverData.data.forEach(function (post) {
-                        post = post[0]
                         post.date = new Date(post.date);
                         post.author = $scope.checkForEmptyImages(post.author);
                         post.wallOwner = $scope.checkForEmptyImages(post.wallOwner);
@@ -242,7 +242,7 @@ app.controller('UserController',
                     $scope.busy = false;
                     $scope.newsFeed = $scope.newsFeed.concat(serverData.data);
                     if($scope.newsFeed.length > 0){
-                        startNewsFeedPostId = $scope.newsFeed[$scope.newsFeed.length - 1].id;
+                        $scope.postsToSkipCount += pageSize;
                     }
 
                     usSpinnerService.stop('spinner-1');

@@ -1,5 +1,6 @@
 ﻿namespace SocialNetwork.Services.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
@@ -141,6 +142,39 @@
             }
 
             return this.ResponseMessage(tokenServiceResponse);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("{username}/AccessToken/Validate")]
+        public IHttpActionResult CheckAccessTokenExpiration(string username)
+        {
+            var currentUser = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.UserName == username);
+            if (currentUser == null)
+            {
+                return this.NotFound();
+            }
+
+            var userSession = this.Data
+                .UserSessions
+                .All()
+                .FirstOrDefault(s => s.OwnerUserId == currentUser.Id);
+            if (userSession == null)
+            {
+                return this.NotFound();
+            }
+
+            if (userSession.ExpirationDateTime < DateTime.Now)
+            {
+                this.Data.UserSessions.Delete(userSession);
+
+                return this.NotFound();
+            }
+
+            return this.Ok("da");
         }
 
         [HttpPost]

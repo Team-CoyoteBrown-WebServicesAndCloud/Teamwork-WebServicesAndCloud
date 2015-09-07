@@ -22,7 +22,7 @@
                     Gender = user.Gender,
                     ProfileImageData = user.ProfileImageData,
                     CoverImageData = user.CoverImageData,
-                    IsFriend = user.Friends.Contains(currentLoggedUser),
+                    IsFriend = user.Friends.Any(f => f.Id == currentLoggedUser.Id),
                     HasPendingRequest = user.FriendRequests.Any(
                         r => r.FriendRequestStatus == FriendRequestStatus.AwaitingApproval &&
                         (r.FromUserId == currentLoggedUser.Id))
