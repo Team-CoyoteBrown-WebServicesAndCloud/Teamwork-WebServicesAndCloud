@@ -34,13 +34,13 @@
 
         public virtual ApplicationUser Author { get; set; }
 
-        public ICollection<CommentLike> Likes
+        public virtual ICollection<CommentLike> Likes
         {
             get { return this.likes; }
             set { this.likes = value; }
         } 
 
-        public ICollection<CommentReply> Replies
+        public virtual ICollection<CommentReply> Replies
         {
             get { return this.replies; }
             set { this.replies = value; }

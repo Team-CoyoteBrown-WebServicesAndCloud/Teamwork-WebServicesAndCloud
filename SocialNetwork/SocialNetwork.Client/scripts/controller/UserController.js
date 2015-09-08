@@ -6,7 +6,8 @@ app.controller('UserController',
             $scope.wallPosts = [];
             $scope.newsFeed = [];
             $scope.busy = false;
-            $scope.postsToSkipCount = 0;
+            $scope.postsToSkip = 0;
+            $scope.wallPostsToSkip = 0;
             var startNewsFeedPostId,
                 startWallPagePostId;
         }
@@ -227,7 +228,7 @@ app.controller('UserController',
             $scope.busy = true;
 
             usSpinnerService.spin('spinner-1');
-            userService.getNewsFeed(pageSize, $scope.postsToSkipCount).then(
+            userService.getNewsFeed(pageSize, $scope.postsToSkip).then(
                 function (serverData) {
                     serverData.data.forEach(function (post) {
                         post.date = new Date(post.date);
@@ -242,7 +243,7 @@ app.controller('UserController',
                     $scope.busy = false;
                     $scope.newsFeed = $scope.newsFeed.concat(serverData.data);
                     if($scope.newsFeed.length > 0){
-                        $scope.postsToSkipCount += pageSize;
+                        $scope.postsToSkip += pageSize;
                     }
 
                     usSpinnerService.stop('spinner-1');
@@ -261,7 +262,7 @@ app.controller('UserController',
             $scope.busy = true;
 
             usSpinnerService.spin('spinner-1');
-            postService.getWallPosts($routeParams.username, pageSize, startWallPagePostId).then(
+            postService.getWallPosts($routeParams.username, pageSize, $scope.wallPostsToSkip).then(
                 function (postsData) {
                     postsData.data.forEach(function (post) {
                         post.date = new Date(post.date);
@@ -274,8 +275,9 @@ app.controller('UserController',
 
                     $scope.busy = false;
                     $scope.wallPosts = $scope.wallPosts.concat(postsData.data);
-                    if($scope.wallPosts.length > 0){
-                        startWallPagePostId = $scope.wallPosts[$scope.wallPosts.length - 1].id;
+                    if ($scope.wallPosts.length > 0) {
+                        $scope.wallPostsToSkip += pageSize;
+                        //startWallPagePostId = $scope.wallPosts[$scope.wallPosts.length - 1].id;
                     }
 
                     usSpinnerService.stop('spinner-1');

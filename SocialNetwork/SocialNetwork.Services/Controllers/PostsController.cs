@@ -6,6 +6,7 @@
     using Data.Data;
     using Data.Interfaces;
     using Infrastructure;
+    using Microsoft.AspNet.Identity;
     using Models.BindingModels.Comments;
     using Models.BindingModels.Post;
     using Models.ViewModels.Comments;
@@ -28,7 +29,6 @@
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [Route]
         public IHttpActionResult AddPost(AddNewPostBindingModel bindingModel)
         {
@@ -75,7 +75,6 @@
         }
 
         [HttpPut]
-        [AllowAnonymous]
         [Route("{postId}")]
         public IHttpActionResult EditPost(EditPostBindingModel bindingModel, int postId)
         {
@@ -109,9 +108,7 @@
         }
 
         [HttpDelete]
-        [AllowAnonymous]
         [Route("{postId}")]
-
         public IHttpActionResult DeletePost(int postId)
         {
             var post = this.Data.Posts.Find(postId);
@@ -133,7 +130,69 @@
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Route("{postId}/likes")]
+        public IHttpActionResult LikePost(int postId)
+        {
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            {
+                return this.BadRequest("Unable to like that post. You can like posts of your friends or on their wall.");
+            }
+
+            if (post.Likes.Any(p => p.UserId == currentUserId))
+            {
+                return this.BadRequest("You have already like this post.");
+            }
+
+            PostLike postLike = new PostLike
+            {
+                PostId = post.Id,
+                UserId = currentUserId
+            };
+
+            this.Data.PostLikes.Add(postLike);
+            this.Data.SaveChanges();
+
+            return this.Ok();
+        }
+
+        [HttpDelete]
+        [Route("{postId}/likes")]
+        public IHttpActionResult UnlikePost(int postId)
+        {
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            {
+                return this.BadRequest("Unable to unlike that post. You can unlike posts of your friends or on their wall.");
+            }
+
+            var postLike = post.Likes.FirstOrDefault(p => p.UserId == currentUserId);
+            if (postLike == null)
+            {
+                return this.BadRequest("This post has no like from you.");
+            }
+
+            this.Data.PostLikes.Delete(postLike);
+            this.Data.SaveChanges();
+
+            return this.Ok();
+        }
+
+        [HttpPost]
         [Route("{postId}/comments")]
         public IHttpActionResult AddNewComment(AddCommentBindingModel bindingModel, int postId)
         {
@@ -178,7 +237,6 @@
         }
 
         [HttpPut]
-        [AllowAnonymous]
         [Route("{postId}/comments/{commentId}")]
         public IHttpActionResult EditComment(AddCommentBindingModel bindingModel, int postId, int commentId)
         {
@@ -239,7 +297,134 @@
                 return this.BadRequest("You have no permission to delete this comment.");
             }
 
-            post.Comments.Remove(comment);
+            this.Data.Comments.Delete(comment);
+            foreach (var like in comment.Likes)
+            {
+                this.Data.CommentLikes.Delete(like);
+            }
+
+            foreach (var reply in comment.Replies)
+            {
+                foreach (var replyLikes in reply.Likes)
+                {
+                    this.Data.CommentLikes.Delete(replyLikes);
+                }
+
+                this.Data.CommentReplies.Delete(reply);
+            }
+
+            this.Data.SaveChanges();
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("{postId}/comments/{commentId}/likes")]
+        public IHttpActionResult LikeComment(int postId, int commentId)
+        {
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            var comment = this.Data.Comments.Find(commentId);
+            if (comment == null)
+            {
+                return this.NotFound();
+            }
+
+            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            {
+                return this.BadRequest("Unable to like that comment. You can like comments of your friends post or on their wall posts.");
+            }
+
+            if (comment.Likes.Any(c => c.UserId == currentUserId))
+            {
+                return this.BadRequest("You have already like this comment.");
+            }
+
+            CommentLike commentLike = new CommentLike
+            {
+                CommentId = comment.Id,
+                UserId = currentUserId
+            };
+
+            this.Data.CommentLikes.Add(commentLike);
+            this.Data.SaveChanges();
+
+            return this.Ok();
+        }
+
+        [HttpDelete]
+        [Route("{postId}/comments/{commentId}/likes")]
+        public IHttpActionResult UnlikeComment(int postId, int commentId)
+        {
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            var comment = this.Data.Comments.Find(commentId);
+            if (comment == null)
+            {
+                return this.NotFound();
+            }
+
+            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            {
+                return this.BadRequest("Unable to unlike that comment. You can unlike comments of your friends posts or on their wall posts.");
+            }
+
+            var commentLike = comment.Likes.FirstOrDefault(c => c.UserId == currentUserId);
+            if (commentLike == null)
+            {
+                return this.BadRequest("This comment has no like from you.");
+            }
+
+            this.Data.CommentLikes.Delete(commentLike);
+            this.Data.SaveChanges();
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("{postId}/comments/{commentId}")]
+        public IHttpActionResult ReplyComment(AddCommentBindingModel bindingModel, int postId, int commentId)
+        {
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var post = this.Data.Posts.Find(postId);
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            var comment = this.Data.Comments.Find(commentId);
+            if (comment == null)
+            {
+                return this.NotFound();
+            }
+
+            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            {
+                return this.BadRequest("Unable to comment. You can comment only posts of your friends or posts on their wall.");
+            }
+
+            CommentReply commentReply = new CommentReply
+            {
+                AuthorId = currentUserId,
+                CommentId = comment.Id,
+                Content = bindingModel.CommentContent,
+                RepliedOn = DateTime.Now
+            };
+
+            comment.Replies.Add(commentReply);
             this.Data.SaveChanges();
 
             return this.Ok();

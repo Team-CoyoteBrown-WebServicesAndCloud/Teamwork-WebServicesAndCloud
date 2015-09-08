@@ -7,7 +7,7 @@ app.controller('AuthenticationController',
                     function(userData) {
                         usSpinnerService.stop('spinner-1');
                         $scope.userData = userData.data[0];
-                        $scope.userData = $scope.checkForEmptyImages(userData.data);
+                        $scope.userData = $scope.checkForEmptyImages(userData.data[0]);
                     },
                     function(error) {
                         notifyService.showError('Unable to get current user data. ' + error.data.message);

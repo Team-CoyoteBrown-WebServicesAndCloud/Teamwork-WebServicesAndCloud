@@ -27,10 +27,9 @@
 
         public virtual ApplicationUser Author { get; set; }
 
-        [Required]
-        public string WallOwnerId { get; set; }
+        public int CommentId { get; set; }
 
-        public virtual ApplicationUser WallOwner { get; set; }
+        public virtual Comment Comment { get; set; }
 
         public virtual ICollection<CommentLike> Likes
         {

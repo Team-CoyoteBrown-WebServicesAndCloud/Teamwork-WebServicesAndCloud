@@ -1,18 +1,13 @@
 ﻿namespace SocialNetwork.Services.Models.ViewModels.Comments
 {
-    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using SocialNetwork.Models;
     using User;
 
-    public class CommentViewModel
+    public class CommentViewModel : BaseCommentViewModel
     {
-        public int Id { get; set; }
-
-        public UserViewModelMinified Author { get; set; }
-
-        public DateTime Date { get; set; }
-
-        public string CommentContent { get; set; }
+        public IEnumerable<CommentReplyViewModel> CommentReplies { get; set; }
 
         public static CommentViewModel Create(Comment comment, ApplicationUser currentUser)
         {
@@ -21,7 +16,20 @@
                 Id = comment.Id,
                 Author = UserViewModelMinified.ConvertTo(comment.Author),
                 Date = comment.PostedOn,
-                CommentContent = comment.Content
+                CommentContent = comment.Content,
+                LikesCount = comment.Likes.Count,
+                Liked = comment.Likes.Any(l => l.UserId == currentUser.Id),
+                CommentReplies = comment.Replies
+                    .OrderByDescending(cr => cr.RepliedOn)
+                    .Select(reply => new CommentReplyViewModel
+                    {
+                        Id = reply.Id,
+                        Author = UserViewModelMinified.ConvertTo(reply.Author),
+                        Date = reply.RepliedOn,
+                        CommentContent = reply.Content,
+                        LikesCount = reply.Likes.Count,
+                        Liked = reply.Likes.Any(l => l.UserId == currentUser.Id),
+                    })
             };
         }
     }

@@ -179,7 +179,7 @@
 
         [HttpGet]
         [Route("feed")]
-        public IHttpActionResult GetNewsFeed([FromUri]int postsCount, [FromUri]int startPostNumber)
+        public IHttpActionResult GetNewsFeed([FromUri]NewsFeedBindingModel bindingModel)
         {
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
@@ -194,8 +194,8 @@
                 .Where(p => p.Author.Friends.Any(f => f.Id == currentUserId) ||
                     p.WallOwner.Friends.Any(f => f.Id == currentUserId))
                 .OrderByDescending(p => p.PostedOn)
-                .Skip(startPostNumber)
-                .Take(postsCount)
+                .Skip(bindingModel.StartPostNumber)
+                .Take(bindingModel.PostsCount)
                 .Select(PostViewModel.Create);
 
             return this.Ok(posts);

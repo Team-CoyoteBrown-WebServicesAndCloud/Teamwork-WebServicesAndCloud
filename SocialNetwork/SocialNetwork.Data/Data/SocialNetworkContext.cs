@@ -92,7 +92,7 @@ namespace SocialNetwork.Data.Data
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CommentReply>()
-                .HasRequired<ApplicationUser>(c => c.WallOwner)
+                .HasRequired<Comment>(c => c.Comment)
                 .WithMany()
                 .WillCascadeOnDelete(false);
 

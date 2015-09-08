@@ -76,7 +76,28 @@
                                 ProfileImageData = comment.Author.ProfileImageData,
                             },
                             Date = comment.PostedOn,
-                            CommentContent = comment.Content
+                            CommentContent = comment.Content,
+                            LikesCount = comment.Likes.Count,
+                            Liked = comment.Likes.Any(l => l.UserId == CurrentUser.Id),
+                            CommentReplies = comment.Replies
+                                .OrderByDescending(cr => cr.RepliedOn)
+                                .Select(reply => new CommentReplyViewModel
+                                {
+                                    Id = reply.Id,
+                                    Author = new UserViewModelMinified
+                                    {
+                                        Id = reply.AuthorId,
+                                        Name = reply.Author.Name,
+                                        Username = reply.Author.UserName,
+                                        IsFriend = reply.Author.Friends.Any(f => f.Id == CurrentUser.Id),
+                                        Gender = reply.Author.Gender,
+                                        ProfileImageData = reply.Author.ProfileImageData,
+                                    },
+                                    Date = reply.RepliedOn,
+                                    CommentContent = reply.Content,
+                                    LikesCount = reply.Likes.Count,
+                                    Liked = reply.Likes.Any(l => l.UserId == CurrentUser.Id),
+                                })
                         })
                 };
             }

@@ -45,8 +45,5 @@
             get { return this.likes; }
             set { this.likes = value; }
         }
-
-      
-        
     }
 }

@@ -3,11 +3,11 @@
 app.factory('postService', function ($http, baseServiceUrl, $localStorage, authenticationService) {
     var postService = {};
 
-    postService.getWallPosts = function (username, pageSize, startPostId) {
-        startPostId = startPostId ? "=" + startPostId : "";
+    postService.getWallPosts = function (username, postsCount, startPostNumber) {
+        startPostNumber = startPostNumber ? startPostNumber : 0;
         return $http({
             method: 'GET',
-            url: baseServiceUrl + '/users/' + username + '/wall?StartPostId' + startPostId + '&PageSize=' + pageSize,
+            url: baseServiceUrl + '/users/' + username + '/wall?StartPostNumber=' + startPostNumber + '&PostsCount=' + postsCount,
             headers: authenticationService.getHeaders()
         })
     };

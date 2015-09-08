@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -17,6 +18,7 @@
     using Microsoft.Owin.Testing;
     using Models.BindingModels;
     using Models.BindingModels.User;
+    using Models.ViewModels.Post;
     using Models.ViewModels.User;
     using SocialNetwork.Models;
     using UserSessionUtils;
@@ -174,7 +176,7 @@
                 return this.NotFound();
             }
 
-            return this.Ok("da");
+            return this.Ok();
         }
 
         [HttpPost]
@@ -204,6 +206,91 @@
                 .Select(UserViewModelMinified.Create);
 
             return this.Ok(users);
+        }
+
+        [HttpGet]
+        [Route("{username}")]
+        public IHttpActionResult GetUserFullData(string username)
+        {
+            var wantedUser = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.UserName == username);
+            if (wantedUser == null)
+            {
+                return this.NotFound();
+            }
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+
+            UserViewModel viewModel = UserViewModel.Create(wantedUser, currentUser);
+
+            return this.Ok(viewModel);
+        }
+
+        [HttpGet]
+        [Route("{username}/wall")]
+        public IHttpActionResult GetWallPosts([FromUri]WallBindingModel bindingModel)
+        {
+            var wantedUser = this.Data
+               .Users
+               .All()
+               .FirstOrDefault(u => u.UserName == bindingModel.Username);
+            if (wantedUser == null)
+            {
+                return this.NotFound();
+            }
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+
+            PostViewModel.CurrentUser = currentUser;
+            var posts = this.Data
+                .Posts
+                .All()
+                .Include(p => p.Author)
+                .Include(p => p.Comments)
+                .Include(p => p.Likes)
+                .Where(p => p.WallOwnerId == wantedUser.Id)
+                .OrderByDescending(p => p.PostedOn)
+                .Skip(bindingModel.StartPostNumber)
+                .Take(bindingModel.PostsCount)
+                .Select(PostViewModel.Create);
+
+            return this.Ok(posts);
+        }
+
+        [HttpGet]
+        [Route("{username}/friends/preview")]
+        public IHttpActionResult GetFriendFriendsPreview(string username)
+        {
+            var wantedUser = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.UserName == username);
+            if (wantedUser == null)
+            {
+                return this.NotFound();
+            }
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+            if (currentUser == null)
+            {
+                return this.BadRequest();
+            }
+            
+            var userFriends = wantedUser.Friends
+                .AsQueryable()
+                .Take(6)
+                .Select(UserViewModelMinified.Create);
+
+            return this.Ok(new
+            {
+                totalCount = wantedUser.Friends.Count,
+                friends = userFriends
+            });
         }
     }
 }
