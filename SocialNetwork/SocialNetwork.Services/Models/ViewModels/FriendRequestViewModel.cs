@@ -1,6 +1,7 @@
 ﻿namespace SocialNetwork.Services.Models.ViewModels
 {
     using System;
+    using System.Linq;
     using System.Linq.Expressions;
     using SocialNetwork.Models;
     using SocialNetwork.Models.Enum;
@@ -14,17 +15,22 @@
 
         public UserViewModelMinified User { get; set; }
 
-        public static Expression<Func<FriendRequest, FriendRequestViewModel>> Create
+        public static Expression<Func<FriendRequest, FriendRequestViewModel>> Create(ApplicationUser currentUser)
         {
-            get
+            return request =>  new FriendRequestViewModel()
             {
-                return request =>  new FriendRequestViewModel()
+                Id = request.Id,
+                Status = request.FriendRequestStatus,
+                User = new UserViewModelMinified
                 {
-                    Id = request.Id,
-                    Status = request.FriendRequestStatus,
-                    User = UserViewModelMinified.ConvertTo(request.FromUser)
-                };
-            }
+                    Id = request.FromUserId,
+                    Name = request.FromUser.Name,
+                    Username = request.FromUser.UserName,
+                    IsFriend = request.FromUser.Friends.Any(f => f.Id == currentUser.Id),
+                    Gender = request.FromUser.Gender,
+                    ProfileImageData = request.FromUser.ProfileImageData
+                }
+            };
         }
     }
 }

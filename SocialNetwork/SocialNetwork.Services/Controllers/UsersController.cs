@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -196,6 +195,8 @@
         [Route("search")]
         public IHttpActionResult SearchUsers([FromUri] SearchBindingModel bindingModel)
         {
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
             var users = this.Data
                 .Users
                 .All()
@@ -203,7 +204,7 @@
                 .ThenBy(u => u.UserName)
                 .Where(u => u.Name.Contains(bindingModel.SearchWord))
                 .Take(5)
-                .Select(UserViewModelMinified.Create);
+                .Select(UserViewModelMinified.Create(currentUser));
 
             return this.Ok(users);
         }
@@ -224,8 +225,8 @@
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
 
-            UserViewModel viewModel = UserViewModel.Create(wantedUser, currentUser);
-
+            UserViewModel viewModel = UserViewModel.ConvertTo(wantedUser, currentUser);
+            
             return this.Ok(viewModel);
         }
 
@@ -244,19 +245,14 @@
 
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
-
-            PostViewModel.CurrentUser = currentUser;
             var posts = this.Data
                 .Posts
                 .All()
-                .Include(p => p.Author)
-                .Include(p => p.Comments)
-                .Include(p => p.Likes)
                 .Where(p => p.WallOwnerId == wantedUser.Id)
                 .OrderByDescending(p => p.PostedOn)
                 .Skip(bindingModel.StartPostNumber)
                 .Take(bindingModel.PostsCount)
-                .Select(PostViewModel.Create);
+                .Select(PostViewModel.Create(currentUser));
 
             return this.Ok(posts);
         }
@@ -284,7 +280,7 @@
             var userFriends = wantedUser.Friends
                 .AsQueryable()
                 .Take(6)
-                .Select(UserViewModelMinified.Create);
+                .Select(UserViewModelMinified.Create(currentUser));
 
             return this.Ok(new
             {

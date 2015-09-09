@@ -1,36 +1,67 @@
 ﻿namespace SocialNetwork.Services.Models.ViewModels.Comments
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using SocialNetwork.Models;
     using User;
 
     public class CommentViewModel : BaseCommentViewModel
     {
-        public IEnumerable<CommentReplyViewModel> CommentReplies { get; set; }
+        public IQueryable<CommentReplyViewModel> CommentReplies { get; set; }
 
-        public static CommentViewModel Create(Comment comment, ApplicationUser currentUser)
+        public static Expression<Func<Comment, CommentViewModel>> Create(ApplicationUser currentUser)
         {
-            return new CommentViewModel()
+            string currentUserId = currentUser.Id;
+            return comment => new CommentViewModel
             {
                 Id = comment.Id,
-                Author = UserViewModelMinified.ConvertTo(comment.Author),
+                Author = new UserViewModelMinified
+                {
+                    Id = comment.AuthorId,
+                    Name = comment.Author.Name,
+                    Username = comment.Author.UserName,
+                    IsFriend = comment.Author.Friends.Any(f => f.Id == currentUserId),
+                    Gender = comment.Author.Gender,
+                    ProfileImageData = comment.Author.ProfileImageData,
+                },
+                Date = comment.PostedOn,
+                CommentContent = comment.Content,
+                LikesCount = comment.Likes.Count,
+                Liked = comment.Likes.Any(l => l.UserId == currentUserId),
+                CommentReplies = comment.Replies
+                    .AsQueryable()
+                    .OrderByDescending(cr => cr.RepliedOn)
+                    .Select(CommentReplyViewModel.Create(currentUser))
+            };
+        }
+
+        public static CommentViewModel ConvertTo(Comment comment, ApplicationUser currentUser)
+        {
+            CommentViewModel commentViewModel = new CommentViewModel
+            {
+                Id = comment.Id,
+                Author = new UserViewModelMinified
+                {
+                    Id = comment.AuthorId,
+                    Name = comment.Author.Name,
+                    Username = comment.Author.UserName,
+                    IsFriend = comment.Author.Friends.Any(f => f.Id == currentUser.Id),
+                    Gender = comment.Author.Gender,
+                    ProfileImageData = comment.Author.ProfileImageData,
+                },
                 Date = comment.PostedOn,
                 CommentContent = comment.Content,
                 LikesCount = comment.Likes.Count,
                 Liked = comment.Likes.Any(l => l.UserId == currentUser.Id),
                 CommentReplies = comment.Replies
                     .OrderByDescending(cr => cr.RepliedOn)
-                    .Select(reply => new CommentReplyViewModel
-                    {
-                        Id = reply.Id,
-                        Author = UserViewModelMinified.ConvertTo(reply.Author),
-                        Date = reply.RepliedOn,
-                        CommentContent = reply.Content,
-                        LikesCount = reply.Likes.Count,
-                        Liked = reply.Likes.Any(l => l.UserId == currentUser.Id),
-                    })
+                    .AsQueryable()
+                    .Select(CommentReplyViewModel.Create(currentUser))
             };
+
+            return commentViewModel;
         }
     }
 }

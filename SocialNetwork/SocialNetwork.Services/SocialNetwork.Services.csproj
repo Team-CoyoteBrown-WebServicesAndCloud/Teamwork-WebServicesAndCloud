@@ -224,8 +224,8 @@
     </Compile>
     <Compile Include="Infrastructure\AspNetUserIdProvider.cs" />
     <Compile Include="Infrastructure\IUserIdProvider.cs" />
-    <Compile Include="Models\AccountBindingModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BindingModels\AccountBindingModels.cs" />
+    <Compile Include="Models\BindingModels\AccountViewModels.cs" />
     <Compile Include="Models\BindingModels\Comments\AddCommentBindingModel.cs" />
     <Compile Include="Models\BindingModels\NewsFeedBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\AddNewPostBindingModel.cs" />

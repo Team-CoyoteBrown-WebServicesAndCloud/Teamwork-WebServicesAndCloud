@@ -6,7 +6,7 @@ namespace SocialNetwork.Services.Models.BindingModels.Post
     public class AddNewPostBindingModel
     {
         [Required]
-        public string Content { get; set; }
+        public string PostContent { get; set; }
 
         [Required]
         public string Username { get; set; }

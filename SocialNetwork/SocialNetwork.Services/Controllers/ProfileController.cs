@@ -1,6 +1,5 @@
 ﻿namespace SocialNetwork.Services.Controllers
 {
-    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using System.Web.Http;
@@ -9,7 +8,6 @@
     using Infrastructure;
     using Models.BindingModels;
     using Models.ViewModels;
-    using Models.ViewModels.Comments;
     using Models.ViewModels.Post;
     using Models.ViewModels.User;
     using SocialNetwork.Models;
@@ -73,7 +71,7 @@
             var user = this.Data.Users.Find(userId);
             var friends = user.Friends
                 .AsQueryable()
-                .Select(UserViewModelMinified.Create);
+                .Select(UserViewModelMinified.Create(user));
 
             return this.Ok(friends);
         }
@@ -83,16 +81,15 @@
         public IHttpActionResult GetFriendsPreviewData()
         {
             var currentUserId = this.UserIdProvider.GetUserId();
-
-            var user = this.Data.Users.Find(currentUserId);
-            var friends = user.Friends
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var friends = currentUser.Friends
                 .AsQueryable()
                 .Take(6)
-                .Select(UserViewModelMinified.Create);
+                .Select(UserViewModelMinified.Create(currentUser));
 
             return this.Ok(new
             {
-                totalCount = user.Friends.Count,
+                totalCount = currentUser.Friends.Count,
                 friends
             });
         }
@@ -142,9 +139,9 @@
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
             var requests = currentUser.FriendRequests
-                .AsQueryable()
                 .Where(r => r.FriendRequestStatus == FriendRequestStatus.AwaitingApproval)
-                .Select(FriendRequestViewModel.Create);
+                .AsQueryable()
+                .Select(FriendRequestViewModel.Create(currentUser));
 
             return this.Ok(requests);
         }
@@ -183,20 +180,15 @@
         {
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
-
-            PostViewModel.CurrentUser = currentUser;
             var posts = this.Data
                 .Posts
                 .All()
-                .Include(p => p.Author)
-                .Include(p => p.Comments)
-                .Include(p => p.Likes)
                 .Where(p => p.Author.Friends.Any(f => f.Id == currentUserId) ||
                     p.WallOwner.Friends.Any(f => f.Id == currentUserId))
                 .OrderByDescending(p => p.PostedOn)
                 .Skip(bindingModel.StartPostNumber)
                 .Take(bindingModel.PostsCount)
-                .Select(PostViewModel.Create);
+                .Select(PostViewModel.Create(currentUser));
 
             return this.Ok(posts);
         }

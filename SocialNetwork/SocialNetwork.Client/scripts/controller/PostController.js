@@ -8,6 +8,7 @@ app.controller('PostController',
             usSpinnerService.spin('spinner-1');
             postService.addNewPost(postContent, $routeParams.username).then(
                 function (serverData) {
+                    serverData.data.author = $scope.checkForEmptyImages(serverData.data.author);
                     $scope.postContent = '';
                     $scope.wallPosts.unshift(serverData.data);
                     notifyService.showInfo('Successfully added new post');
@@ -40,8 +41,12 @@ app.controller('PostController',
             usSpinnerService.spin('spinner-1');
             postService.deletePost(post.id).then(
                 function () {
-                    var deletedPostIndex =  $scope.wallPosts.indexOf(post);
-                    $scope.wallPosts.splice(deletedPostIndex, 1);
+                    var wallPostIndex =  $scope.wallPosts.indexOf(post);
+                    $scope.wallPosts.splice(wallPostIndex, 1);
+
+                    var newsFeedIndex = $scope.newsFeed.indexOf(post);
+                    $scope.newsFeed.splice(newsFeedIndex, 1);
+
                     notifyService.showInfo('The post has been successfully removed');
                     usSpinnerService.stop('spinner-1');
                 },

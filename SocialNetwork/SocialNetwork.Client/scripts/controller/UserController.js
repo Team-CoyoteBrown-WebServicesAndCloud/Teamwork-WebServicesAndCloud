@@ -8,8 +8,6 @@ app.controller('UserController',
             $scope.busy = false;
             $scope.postsToSkip = 0;
             $scope.wallPostsToSkip = 0;
-            var startNewsFeedPostId,
-                startWallPagePostId;
         }
 
         $scope.getUserFullData = function getUserFullData() {

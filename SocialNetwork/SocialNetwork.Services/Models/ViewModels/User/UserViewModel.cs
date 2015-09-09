@@ -12,23 +12,23 @@
 
         public bool HasPendingRequest { get; set; }
 
-        public static UserViewModel Create(ApplicationUser user, ApplicationUser currentLoggedUser)
+        public static UserViewModel ConvertTo(ApplicationUser user, ApplicationUser currentUser)
         {
-            UserViewModel userViewModel = new UserViewModel
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Username = user.UserName,
-                    Gender = user.Gender,
-                    ProfileImageData = user.ProfileImageData,
-                    CoverImageData = user.CoverImageData,
-                    IsFriend = user.Friends.Any(f => f.Id == currentLoggedUser.Id),
-                    HasPendingRequest = user.FriendRequests.Any(
-                        r => r.FriendRequestStatus == FriendRequestStatus.AwaitingApproval &&
-                        (r.FromUserId == currentLoggedUser.Id))
-                };
+            UserViewModel wantedUser = new UserViewModel
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Username = user.UserName,
+                Gender = user.Gender,
+                ProfileImageData = user.ProfileImageData,
+                CoverImageData = user.CoverImageData,
+                IsFriend = user.Friends.Any(f => f.Id == currentUser.Id),
+                HasPendingRequest = user.FriendRequests.Any(
+                    r => r.FriendRequestStatus == FriendRequestStatus.AwaitingApproval &&
+                    (r.FromUserId == currentUser.Id))
+            };
 
-            return userViewModel;
+            return wantedUser;
         }
     }
 }

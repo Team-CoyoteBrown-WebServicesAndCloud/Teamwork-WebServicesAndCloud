@@ -6,7 +6,6 @@
     using Data.Data;
     using Data.Interfaces;
     using Infrastructure;
-    using Microsoft.AspNet.Identity;
     using Models.BindingModels.Comments;
     using Models.BindingModels.Post;
     using Models.ViewModels.Comments;
@@ -26,6 +25,34 @@
         public PostsController(ISocialNetworkData data, IUserIdProvider userIdProvider)
             : base(data, userIdProvider)
         {
+        }
+
+        [HttpGet]
+        [Route("{postId}")]
+        public IHttpActionResult GetPostsById(int postId)
+        {
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var post = this.Data
+                .Posts
+                .All()
+                .Where(p => p.Id == postId)
+                .Select(PostViewModel.Create(currentUser))
+                .FirstOrDefault();
+
+            if (post == null)
+            {
+                return this.NotFound();
+            }
+
+            var postAutor = this.Data.Users.Find(post.Author.Id);
+            if ((postAutor.Friends.All(f => f.Id != currentUserId)) && post.Author.Id != currentUserId)
+            {
+                return this.Unauthorized();
+            }
+
+            return this.Ok(post);
         }
 
         [HttpPost]
@@ -58,9 +85,9 @@
                 return this.BadRequest("You have no permissions to make this post.");
             }
 
-            var post = new Post()
+            var post = new Post
             {
-                Content = bindingModel.Content,
+                Content = bindingModel.PostContent,
                 PostedOn = DateTime.Now,
                 AuthorId = currentUserId,
                 WallOwnerId = existingWallOwner.Id
@@ -69,7 +96,7 @@
             this.Data.Posts.Add(post);
             this.Data.SaveChanges();
 
-            var postViewModel = AddPostViewModel.Create(post, currentUser);
+            AddPostViewModel postViewModel = AddPostViewModel.ConvertTo(post, currentUser);
             
             return this.Ok(postViewModel);
         }
@@ -231,7 +258,7 @@
             post.Comments.Add(comment);
             this.Data.SaveChanges();
 
-            var commentViewModel = CommentViewModel.Create(comment, currentUser);
+            CommentViewModel commentViewModel = CommentViewModel.ConvertTo(comment, currentUser);
 
             return this.Ok(commentViewModel);
         }

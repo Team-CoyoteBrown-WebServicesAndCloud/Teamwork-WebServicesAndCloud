@@ -15,7 +15,7 @@ app.factory('postService', function ($http, baseServiceUrl, $localStorage, authe
     postService.addNewPost = function (postContent, username) {
         return $http({
             method: 'POST',
-            url: baseServiceUrl + '/posts/',
+            url: baseServiceUrl + '/posts',
             headers: authenticationService.getHeaders(),
             data: {
                 username: username,
@@ -30,7 +30,7 @@ app.factory('postService', function ($http, baseServiceUrl, $localStorage, authe
             url: baseServiceUrl + '/posts/' + postId,
             headers: authenticationService.getHeaders(),
             data: {
-                postContent: postContent
+                content: postContent
             }
         })
     };

@@ -20,6 +20,8 @@ using SocialNetwork.Services.Results;
 
 namespace SocialNetwork.Services.Controllers
 {
+    using Models.BindingModels;
+
     [Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController

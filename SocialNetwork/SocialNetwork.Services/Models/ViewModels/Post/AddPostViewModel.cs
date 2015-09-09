@@ -20,14 +20,30 @@
 
         public IEnumerable<CommentViewModel> Comments { get; set; }
 
-        public static AddPostViewModel Create(Post post, ApplicationUser currentUser)
+        public static AddPostViewModel ConvertTo(Post post, ApplicationUser currentUser)
         {
-            return new AddPostViewModel
+            AddPostViewModel postViewModel = new AddPostViewModel
             {
                 Id = post.Id,
-                Author = UserViewModelMinified.ConvertTo(post.Author),
-                WallOwner = UserViewModelMinified.ConvertTo(post.WallOwner),
-                Content = post.Content,
+                Author = new UserViewModelMinified
+                {
+                    Id = post.AuthorId,
+                    Name = post.Author.Name,
+                    Username = post.Author.UserName,
+                    IsFriend = post.Author.Friends.Any(f => f.Id == currentUser.Id),
+                    Gender = post.Author.Gender,
+                    ProfileImageData = post.Author.ProfileImageData,
+                },
+                WallOwner = new UserViewModelMinified
+                {
+                    Id = post.WallOwnerId,
+                    Name = post.WallOwner.Name,
+                    Username = post.WallOwner.UserName,
+                    IsFriend = post.WallOwner.Friends.Any(f => f.Id == currentUser.Id),
+                    Gender = post.WallOwner.Gender,
+                    ProfileImageData = post.WallOwner.ProfileImageData,
+                },
+                PostContent = post.Content,
                 PostedOn = post.PostedOn,
                 LikesCount = post.Likes.Count,
                 Liked = post.Likes.Any(l => l.UserId == currentUser.Id),
@@ -35,8 +51,11 @@
                 Comments = post.Comments
                     .Reverse()
                     .Take(4)
-                    .Select(c => CommentViewModel.Create(c, currentUser))
+                    .AsQueryable()
+                    .Select(CommentViewModel.Create(currentUser))
             };
+
+            return postViewModel;
         }
     }
 }

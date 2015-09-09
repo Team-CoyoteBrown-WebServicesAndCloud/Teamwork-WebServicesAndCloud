@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SocialNetwork.Services.Models
+﻿namespace SocialNetwork.Services.Models.BindingModels
 {
+    using System.Collections.Generic;
+
     // Models returned by AccountController actions.
 
     public class ExternalLoginViewModel

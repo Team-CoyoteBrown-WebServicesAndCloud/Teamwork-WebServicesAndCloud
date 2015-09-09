@@ -9,34 +9,17 @@
     {
         public bool IsFriend { get; set; }
 
-        public static UserViewModelMinified ConvertTo(ApplicationUser user)
+        public static Expression<Func<ApplicationUser, UserViewModelMinified>> Create(ApplicationUser user)
         {
-            UserViewModelMinified userViewModel = new UserViewModelMinified
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Username = user.UserName,
-                    IsFriend = user.Friends.Any(f => f.Id == user.Id),
-                    Gender = user.Gender,
-                    ProfileImageData = user.ProfileImageData,
-                };
-
-            return userViewModel;
-        }
-
-        public static Expression<Func<ApplicationUser, UserViewModelMinified>> Create
-        {
-            get
+            return userViewModel => new UserViewModelMinified
             {
-                return user => new UserViewModelMinified
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Username = user.UserName,
-                    Gender = user.Gender,
-                    ProfileImageData = user.ProfileImageData,
-                };
-            }
+                Id = userViewModel.Id,
+                Name = userViewModel.Name,
+                Username = userViewModel.UserName,
+                IsFriend = userViewModel.Friends.Any(f => f.Id == user.Id),
+                Gender = userViewModel.Gender,
+                ProfileImageData = userViewModel.ProfileImageData
+            };
         }
     }
 }
