@@ -6,6 +6,7 @@
         WallPost,
         Comment,
         PostGroup,
-        PostLike
+        PostLike,
+        JoinGroup
     }
 }

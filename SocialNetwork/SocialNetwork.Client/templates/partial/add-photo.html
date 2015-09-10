@@ -1,0 +1,31 @@
+<div ng-include="'templates/partial/navbar-header.html'"></div>
+<main id="wrapper">
+    <section class="col-lg-8 col-lg-offset-2" id="mainSection" ng-controller="UserController" ng-init="getUserFullData()">
+        <div class="upload-image-section">
+            <section id="upload-cover-image-preview-section" class="image-section-big">
+                <img class="image-preview image-max-width"
+                     ng-src="{{photoData.image}}"
+                     ng-show="photoData.image != null"
+                     base-sixty-four-image="photoData.image"/>
+            </section>
+            <label id="addPhoto" class="btn btn-primary blackButton" for="add-photo">
+                <input class="file-button"
+                       id="add-photo"
+                       type="file"
+                       ng-model="photoData.image"
+                       base-sixty-four-input>
+                Choose Photo
+            </label>
+        </div>
+        <section class="mediumsSection clearfix">
+            <label id="photoDescriptionLabel" for="photoDescription">Description:</label>
+            <textarea id="photoDescription" rows="2" class="col-lg-8" ng-model="photoData.description"></textarea>
+        </section>
+        <div class="form-group buttons">
+            <div class="col-lg-10 col-lg-offset-5 confirm-buttons">
+                <a href="#/" class="btn btn-default">Cancel</a>
+                <button ng-click="addPhoto(photoData)" type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </section>
+</main>

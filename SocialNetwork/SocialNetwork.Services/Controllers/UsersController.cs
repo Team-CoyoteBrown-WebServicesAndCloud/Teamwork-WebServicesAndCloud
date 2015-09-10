@@ -16,7 +16,10 @@
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Testing;
     using Models.BindingModels;
+    using Models.BindingModels.Photos;
     using Models.BindingModels.User;
+    using Models.ViewModels.Groups;
+    using Models.ViewModels.Photos;
     using Models.ViewModels.Post;
     using Models.ViewModels.User;
     using SocialNetwork.Models;
@@ -234,6 +237,16 @@
         [Route("{username}/wall")]
         public IHttpActionResult GetWallPosts([FromUri]WallBindingModel bindingModel)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            if (bindingModel == null)
+            {
+                return this.BadRequest("Invalid data - username cannot be null");
+            }
+
             var wantedUser = this.Data
                .Users
                .All()
@@ -272,10 +285,6 @@
 
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
-            if (currentUser == null)
-            {
-                return this.BadRequest();
-            }
             
             var userFriends = wantedUser.Friends
                 .AsQueryable()
@@ -284,9 +293,137 @@
 
             return this.Ok(new
             {
-                totalCount = wantedUser.Friends.Count,
-                friends = userFriends
+                TotalCount = wantedUser.Friends.Count,
+                Friends = userFriends
             });
+        }
+
+        [HttpGet]
+        [Route("{username}/groups")]
+        public IHttpActionResult GetUserGroups(string username)
+        {
+            var wantedUser = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.UserName == username);
+            if (wantedUser == null)
+            {
+                return this.NotFound();
+            }
+
+            var wantedGroups = wantedUser.Groups
+                .AsQueryable()
+                .Select(GroupViewModelMinified.Create);
+
+            return this.Ok(wantedGroups);
+        }
+
+        [HttpGet]
+        [Route("{username}/photos/preview")]
+        public IHttpActionResult GetUserPhotosPreview(string username)
+        {
+            var wantedUser = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.UserName == username);
+            if (wantedUser == null)
+            {
+                return this.NotFound();
+            }
+
+            var userPhotos = this.Data
+                .Photos
+                .All()
+                .Where(p => p.PhotoOwnerId == wantedUser.Id)
+                .Take(6)
+                .Select(PhotoViewModelPreview.Create);
+
+            return this.Ok(new
+            {
+                Photos = userPhotos,
+                TotalCount = wantedUser.Photos.Count
+            });
+        }
+
+        [HttpGet]
+        [Route("{username}/photos")]
+        public IHttpActionResult GetUserPhotos(string username)
+        {
+            var wantedUser = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.UserName == username);
+            if (wantedUser == null)
+            {
+                return this.NotFound();
+            }
+
+            var userPhotos = this.Data
+                .Photos
+                .All()
+                .Where(p => p.PhotoOwnerId == wantedUser.Id)
+                .Select(PhotoViewModelMinified.Create);
+
+            return this.Ok(userPhotos);
+        }
+
+        [HttpPost]
+        [Route("photos")]
+        public IHttpActionResult AddPhoto(AddPhotoBindingModel bindingModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            if (bindingModel == null || !this.IsValidBase64Format(bindingModel.Image))
+            {
+                return this.BadRequest("Invalid data");
+            }
+
+            string source = string.Format(
+                   "{0}{1}", "data:image/jpg;base64,", bindingModel.Image);
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            var currentUser = this.Data.Users.Find(currentUserId);
+
+            Photo photo = new Photo
+            {
+                Source = source,
+                Description = bindingModel.Description,
+                PostedOn = DateTime.Now,
+                PhotoOwnerId = currentUserId
+            };
+
+            currentUser.Photos.Add(photo);
+
+            this.Data.Photos.Add(photo);
+            this.Data.SaveChanges();
+
+            return this.Ok();
+        }
+
+        private bool IsValidBase64Format(string base64String)
+        {
+            if (string.IsNullOrEmpty(base64String) ||
+                base64String.Length % 4 != 0 ||
+                base64String.Contains(" ") ||
+                base64String.Contains("\t") ||
+                base64String.Contains("\r") ||
+                base64String.Contains("\n"))
+            {
+                return false;
+            }
+
+            try
+            {
+                Convert.FromBase64String(base64String);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                return false;
+            }
         }
     }
 }

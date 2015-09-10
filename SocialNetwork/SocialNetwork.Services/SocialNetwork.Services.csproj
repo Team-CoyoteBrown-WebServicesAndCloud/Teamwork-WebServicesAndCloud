@@ -215,6 +215,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -227,7 +228,9 @@
     <Compile Include="Models\BindingModels\AccountBindingModels.cs" />
     <Compile Include="Models\BindingModels\AccountViewModels.cs" />
     <Compile Include="Models\BindingModels\Comments\AddCommentBindingModel.cs" />
+    <Compile Include="Models\BindingModels\Groups\CreateGroupBindingModel.cs" />
     <Compile Include="Models\BindingModels\NewsFeedBindingModel.cs" />
+    <Compile Include="Models\BindingModels\Photos\AddPhotoBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\AddNewPostBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\DeletePostBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\EditPostBindingModel.cs" />
@@ -240,8 +243,16 @@
     <Compile Include="Models\ViewModels\Comments\BaseCommentViewModel.cs" />
     <Compile Include="Models\ViewModels\Comments\CommentReplyViewModel.cs" />
     <Compile Include="Models\ViewModels\Comments\CommentViewModel.cs" />
+    <Compile Include="Models\ViewModels\Groups\BaseGroupViewModel.cs" />
+    <Compile Include="Models\ViewModels\Groups\GroupViewModel.cs" />
+    <Compile Include="Models\ViewModels\Groups\GroupViewModelMinified.cs" />
+    <Compile Include="Models\ViewModels\Groups\GroupViewModelPreview.cs" />
+    <Compile Include="Models\ViewModels\Photos\BasePhotoViewModel.cs" />
+    <Compile Include="Models\ViewModels\Photos\PhotoViewModelMinified.cs" />
+    <Compile Include="Models\ViewModels\Photos\PhotoViewModelPreview.cs" />
     <Compile Include="Models\ViewModels\Post\AddPostViewModel.cs" />
     <Compile Include="Models\ViewModels\Post\BasePostViewModel.cs" />
+    <Compile Include="Models\ViewModels\Post\GroupPostViewModel.cs" />
     <Compile Include="Models\ViewModels\Post\PostViewModel.cs" />
     <Compile Include="Models\ViewModels\User\BaseUserViewModel.cs" />
     <Compile Include="Models\ViewModels\User\CurrentUserViewModel.cs" />

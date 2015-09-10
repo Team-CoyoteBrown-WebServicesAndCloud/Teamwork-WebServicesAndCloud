@@ -2594,6 +2594,8 @@
     <Content Include="templates\user\change-password.html" />
     <Content Include="templates\user\edit-profile.html" />
     <Content Include="templates\user\user-all-friends.html" />
+    <Content Include="templates\user\user-photos-preview.html" />
+    <Content Include="templates\user\user-photos.html" />
     <Content Include="templates\user\user-wall.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -23,7 +23,7 @@
         public string Description { get; set; }
 
         [Required]
-        public DateTime UploadedOn { get; set; }
+        public DateTime PostedOn { get; set; }
 
         [Required]
         public string PhotoOwnerId { get; set; }

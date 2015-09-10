@@ -168,7 +168,7 @@
                 return this.NotFound();
             }
 
-            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            if (this.HasAuthorization(currentUser, post))
             {
                 return this.BadRequest("Unable to like that post. You can like posts of your friends or on their wall.");
             }
@@ -202,7 +202,7 @@
                 return this.NotFound();
             }
 
-            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            if (this.HasAuthorization(currentUser, post))
             {
                 return this.BadRequest("Unable to unlike that post. You can unlike posts of your friends or on their wall.");
             }
@@ -242,7 +242,7 @@
                 return this.NotFound();
             }
 
-            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            if (this.HasAuthorization(currentUser, post))
             {
                 return this.BadRequest("Unable to post comment. You can comment only on your friend's posts or post made on their wall.");
             }
@@ -363,7 +363,7 @@
                 return this.NotFound();
             }
 
-            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            if (this.HasAuthorization(currentUser, post))
             {
                 return this.BadRequest("Unable to like that comment. You can like comments of your friends post or on their wall posts.");
             }
@@ -403,7 +403,7 @@
                 return this.NotFound();
             }
 
-            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            if (this.HasAuthorization(currentUser, post))
             {
                 return this.BadRequest("Unable to unlike that comment. You can unlike comments of your friends posts or on their wall posts.");
             }
@@ -424,6 +424,16 @@
         [Route("{postId}/comments/{commentId}")]
         public IHttpActionResult ReplyComment(AddCommentBindingModel bindingModel, int postId, int commentId)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            if (bindingModel == null)
+            {
+                return this.BadRequest("Invalid data.");
+            }
+
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
             var post = this.Data.Posts.Find(postId);
@@ -438,7 +448,7 @@
                 return this.NotFound();
             }
 
-            if (!currentUser.Friends.Contains(post.Author) && !currentUser.Friends.Contains(post.WallOwner))
+            if (this.HasAuthorization(currentUser, post))
             {
                 return this.BadRequest("Unable to comment. You can comment only posts of your friends or posts on their wall.");
             }
@@ -455,6 +465,13 @@
             this.Data.SaveChanges();
 
             return this.Ok();
+        }
+
+        private bool HasAuthorization(ApplicationUser currentUser, Post post)
+        {
+            return !currentUser.Friends.Contains(post.Author) &&
+                   !currentUser.Friends.Contains(post.WallOwner) &&
+                   post.WallOwnerId != currentUser.Id;
         }
     }
 }

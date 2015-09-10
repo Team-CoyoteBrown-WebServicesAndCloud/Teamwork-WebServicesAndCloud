@@ -112,13 +112,23 @@ namespace SocialNetwork.Data.Data
                 });
 
             modelBuilder.Entity<Group>()
-                .HasMany<ApplicationUser>(g => g.Users)
+                .HasMany<ApplicationUser>(g => g.Members)
                 .WithMany()
                 .Map(gu =>
                 {
                     gu.MapLeftKey("GroupId");
-                    gu.MapRightKey("UserId");
-                    gu.ToTable("UserGroups");
+                    gu.MapRightKey("MemberId");
+                    gu.ToTable("GroupsMembers");
+                });
+
+            modelBuilder.Entity<Group>()
+                .HasMany<ApplicationUser>(g => g.Admins)
+                .WithMany()
+                .Map(gu =>
+                {
+                    gu.MapLeftKey("GroupId");
+                    gu.MapRightKey("AdminId");
+                    gu.ToTable("GroupsAdmins");
                 });
 
             base.OnModelCreating(modelBuilder);

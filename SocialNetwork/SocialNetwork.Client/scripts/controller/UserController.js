@@ -8,7 +8,12 @@ app.controller('UserController',
             $scope.busy = false;
             $scope.postsToSkip = 0;
             $scope.wallPostsToSkip = 0;
+            $scope.photoData = [];
         }
+
+        $scope.isCurrentUserWall = function (username) {
+            return username == $localStorage.currentUser.userName;
+        };
 
         $scope.getUserFullData = function getUserFullData() {
             usSpinnerService.spin('spinner-1');
@@ -286,4 +291,37 @@ app.controller('UserController',
                 }
             )
         };
+
+        $scope.addPhoto = function (photoData) {
+            var data = {};
+            data.description = photoData.description;
+            data.image = photoData.image.base64;
+            usSpinnerService.spin('spinner-1');
+
+            userService.addPhoto(data).then(
+                function () {
+                    usSpinnerService.stop('spinner-1');
+                    notifyService.showInfo("The photo has been successfully uploaded.");
+
+                    delete $scope.photoData;
+                },
+                function () {
+                    usSpinnerService.stop('spinner-1');
+                    notifyService.showError("Unable to upload the photo " + error.data.message);
+                }
+            )
+        };
+
+        $scope.getUserPhotosPreview = function () {
+            usSpinnerService.spin('spinner-1');
+            userService.getUserPhotosPreview($routeParams.username).then(
+                function (serverData) {
+                    usSpinnerService.stop('spinner-1');
+                    $scope.userPhotos = serverData.data;
+                },
+                function () {
+                    usSpinnerService.stop('spinner-1');
+                }
+            )
+        }
     });

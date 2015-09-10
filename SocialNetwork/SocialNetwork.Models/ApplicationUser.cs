@@ -44,7 +44,7 @@
         [Range(0, 100)]
         public int? Age { get; set; }
 
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
 
         public virtual ICollection<Post> OwnPosts
         {

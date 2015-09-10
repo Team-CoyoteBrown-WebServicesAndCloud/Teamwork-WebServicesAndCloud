@@ -62,6 +62,7 @@
     <Compile Include="CommentReply.cs" />
     <Compile Include="Enum\FriendRequestStatus.cs" />
     <Compile Include="Enum\Gender.cs" />
+    <Compile Include="Enum\GroupType.cs" />
     <Compile Include="Enum\NotificationType.cs" />
     <Compile Include="FriendRequest.cs" />
     <Compile Include="Group.cs" />

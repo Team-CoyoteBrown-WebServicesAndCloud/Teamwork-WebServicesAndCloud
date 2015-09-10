@@ -1,5 +1,6 @@
 ﻿namespace SocialNetwork.Services.Controllers
 {
+    using System;
     using System.Web.Http;
     using Data.Data;
     using Data.Interfaces;
@@ -49,6 +50,29 @@
             }
 
             return null;
+        }
+
+        protected bool IsValidBase64Format(string base64String)
+        {
+            if (string.IsNullOrEmpty(base64String) ||
+                base64String.Length % 4 != 0 ||
+                base64String.Contains(" ") ||
+                base64String.Contains("\t") ||
+                base64String.Contains("\r") ||
+                base64String.Contains("\n"))
+            {
+                return false;
+            }
+
+            try
+            {
+                Convert.FromBase64String(base64String);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                return false;
+            }
         }
     }
 }

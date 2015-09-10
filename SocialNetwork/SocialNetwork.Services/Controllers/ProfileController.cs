@@ -1,12 +1,13 @@
 ﻿namespace SocialNetwork.Services.Controllers
 {
-    using System.Data.Entity;
+    using System;
     using System.Linq;
     using System.Web.Http;
     using Data.Data;
     using Data.Interfaces;
     using Infrastructure;
     using Models.BindingModels;
+    using Models.BindingModels.User;
     using Models.ViewModels;
     using Models.ViewModels.Post;
     using Models.ViewModels.User;
@@ -42,17 +43,59 @@
             return this.Ok(user);
         }
 
-        [HttpPut]
-        public IHttpActionResult EditUserProfil(EditProfilBindingModel model)
+        [HttpPatch]
+        [Route]
+        public IHttpActionResult EditUserProfile(EditProfilBindingModel bindingModel)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            if (bindingModel == null)
+            {
+                return this.BadRequest("Invalid data.");
+            }
+
             var userId = this.UserIdProvider.GetUserId();
             var user = this.Data.Users.Find(userId);
 
-            user.Name = model.Name;
-            user.Email = model.Email;
-            user.Gender = model.Gender;
+            if (bindingModel.Email != null)
+            {
+                bool isEmailFree = this.Data
+                    .Users
+                    .All()
+                    .FirstOrDefault(u => u.Email == bindingModel.Email) == null;
+                if (!isEmailFree)
+                {
+                    return this.BadRequest("Email is already taken by another user.");
+                }
 
-            this.Data.Users.Update(user);
+                user.Email = bindingModel.Email;
+            }
+
+            if (bindingModel.Name != null)
+            {
+                user.Name = bindingModel.Name;
+            }
+
+            if (bindingModel.Gender != null)
+            {
+                user.Gender = bindingModel.Gender;
+            }
+
+            if (bindingModel.ProfileImageData != null && this.IsValidBase64Format(bindingModel.ProfileImageData))
+            {
+                user.ProfileImageData = string.Format(
+                    "{0}{1}", "data:image/jpg;base64,", bindingModel.ProfileImageData);
+            }
+
+            if (bindingModel.CoverImageData != null && this.IsValidBase64Format(bindingModel.CoverImageData))
+            {
+                user.CoverImageData = string.Format(
+                    "{0}{1}", "data:image/jpg;base64,", bindingModel.CoverImageData);
+            }
+            
             this.Data.SaveChanges();
 
             return this.Ok();
@@ -178,6 +221,16 @@
         [Route("feed")]
         public IHttpActionResult GetNewsFeed([FromUri]NewsFeedBindingModel bindingModel)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            if (bindingModel == null)
+            {
+                return this.BadRequest("Invalid data.");
+            }
+
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
             var posts = this.Data
@@ -213,6 +266,7 @@
 
             request.FriendRequestStatus = FriendRequestStatus.Approved;
             currentUser.Friends.Add(existingUser);
+            existingUser.Friends.Add(currentUser);
 
             this.Data.SaveChanges();
             return this.Ok();

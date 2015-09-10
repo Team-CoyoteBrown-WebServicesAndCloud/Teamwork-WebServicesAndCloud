@@ -50,6 +50,14 @@ app.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'templates/user/all-own-friends.html',
             controller: 'MainController'
         })
+        .when('/users/:username/photos/', {
+            templateUrl: 'templates/user/user-photos.html',
+            controller: 'MainController'
+        })
+        .when('/users/:username/photos/add', {
+            templateUrl: 'templates/partial/add-photo.html',
+            controller: 'MainController'
+        })
         .otherwise({
             redirectTo: '/'
         });

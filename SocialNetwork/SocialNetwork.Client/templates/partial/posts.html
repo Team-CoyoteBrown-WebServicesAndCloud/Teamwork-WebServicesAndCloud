@@ -1,4 +1,4 @@
-<header class="well wallPostHeader" ng-controller="UserController">
+<header class="well wallPostHeader" ng-controller="UserController" ng-init="getUserWallPage()">
     <div ng-if="wallPosts.length" class="wallPostHeaderText">{{userFullData.name}} wall posts</div>
     <div ng-if="!wallPosts.length" class="wallPostHeaderText">No posts on {{userFullData.name}}'s wall</div>
 </header>

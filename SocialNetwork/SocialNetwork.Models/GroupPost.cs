@@ -30,7 +30,7 @@
         public virtual ApplicationUser Author { get; set; }
 
         [Required]
-        public string GroupId { get; set; }
+        public int GroupId { get; set; }
 
         public virtual Group Group { get; set; }
 

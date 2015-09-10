@@ -147,6 +147,7 @@ a{
 
 .mediumsSection{
     text-align: center;
+    margin-top: 2%;
 }
 
 .mediumsSection > div{
@@ -256,6 +257,47 @@ a{
     vertical-align: top;
 }
 
+.image-section-big {
+    width: 65%;
+    margin-top: 4% !important;
+    max-height: 500px;
+}
+
+.upload-image-section {
+    text-align: center;
+    margin-bottom: 1%;
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+}
+
+.confirm-buttons {
+    margin-bottom: 3%;
+}
+
+#photoDescriptionLabel {
+    display: block;
+    font-size: 16px;
+}
+
+#photoDescription {
+    border: ridge 2px;
+    padding: 7px 11px !important;
+    min-height: 6em;
+    overflow: auto;
+    background-color: #fff;
+    resize: none;
+    text-overflow: ellipsis !important;
+    display: inline-block;
+    width: 50%;
+    margin: 0 25%;
+}
+
+#photoDescription:empty:not(:focus):before{
+    content:attr(data-ph);
+    font-size: .9em;
+}
+
 .file-button{
     display: none !important;
 }
@@ -305,8 +347,13 @@ a{
     margin-left: 2%;
 }
 
-.image-preview{
+.image-preview {
     border: 2px solid #222222;
+}
+
+.image-max-width {
+    max-width: 100%;
+    margin-bottom: 3%;
 }
 
 .buttons{
@@ -346,6 +393,72 @@ a{
 
 #newsFeed {
     margin-top: -50px;
+}
+
+#createGroup{
+    width: 35.2%;
+    float: right;
+    right: 0 !important;
+    left: 7%;
+    position: relative;
+    padding: 12px !important;
+}
+
+.photosBox{
+    width: 35%;
+    float: right;
+    right: 0 !important;
+    position: absolute;
+    padding: 12px !important;
+    top: 48%;
+    left: 64.5%;
+}
+
+.photosBoxPreviewElement{
+    border: 1px solid #fdfdfd;
+    border-top: 0;
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+    max-width: 90px;
+    max-height: 90px;
+    position: relative;
+}
+
+.photosBoxPreviewElement:nth-of-type(-n+3){
+    border-top: 1px solid #fdfdfd;
+}
+
+#addPhoto{
+    left: 44%;
+    text-align: center;
+}
+
+.blackButton{
+    background-color: rgb(65, 65, 65) !important;
+    border-color: #313131 !important;
+}
+
+.blackButton:hover{
+    background-color: rgb(47, 47, 47) !important;
+    border-color: #242424 !important;
+}
+
+#add-new-photo {
+    text-align: center;
+    margin-bottom: 6%;
+    width: 100%;
+    vertical-align: top;
+    top: 30%;
+    position: absolute;
+}
+
+#addPhotoSection {
+    width: 200px;
+    height: 100px;
+    border: 1px solid black;
+    top: 10%;
+    position: absolute;
 }
 
 @media (min-width: 1366px) {

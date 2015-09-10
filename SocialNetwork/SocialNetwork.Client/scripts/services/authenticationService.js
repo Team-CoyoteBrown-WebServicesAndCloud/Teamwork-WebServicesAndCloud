@@ -62,7 +62,7 @@ app.factory('authenticationService', function ($http, baseServiceUrl, $localStor
 
     authenticationService.editProfile = function (userData) {
         return $http({
-            method: 'PUT',
+            method: 'PATCH',
             url: baseServiceUrl + '/me',
             data: userData,
             headers: this.getHeaders()

@@ -1,0 +1,15 @@
+﻿<section ng-init="getUserPhotosPreview()">
+    <div class="photosBox well bs-component">
+        <div class="friendsCount">
+            <a class="friendsCountLink" href="#/users/{{userFullData.username}}/photos/">
+                <p class="friendsTitle">Photos - </p>
+                <span class="friendsTotalCount">{{userPhotos.totalCount}}</span>
+            </a>
+        </div>
+        <ul class="friendsBoxList">
+            <li class="photosBoxPreviewElement" ng-repeat="photo in userPhotos.photos">
+                <img class="friendBoxPreviewImage hover-box" ng-src="{{photo.image}}" />
+            </li>
+        </ul>
+    </div>
+</section>

@@ -64,7 +64,7 @@ app.factory('userService', function ($http, baseServiceUrl, $localStorage, authe
             method: 'PUT',
             //url: baseServiceUrl + '/me/requests/' + id + '?status=approved',
             url: baseServiceUrl + '/me/requests/' + id + "/approve",
-            headers: authenticationService.getHeaders(),
+            headers: authenticationService.getHeaders()
         })
     };
 
@@ -101,14 +101,22 @@ app.factory('userService', function ($http, baseServiceUrl, $localStorage, authe
         })
     };
 
+    userService.getUserPhotosPreview = function (username) {
+        return $http({
+            method: 'GET',
+            url: baseServiceUrl + '/users/' + username + '/photos/preview',
+            headers: authenticationService.getHeaders()
+        })
+    };
+
+    userService.addPhoto = function (photoData) {
+        return $http({
+            method: 'POST',
+            url: baseServiceUrl + '/users/photos',
+            headers: authenticationService.getHeaders(),
+            data: photoData
+        })
+    };
+
     return userService;
 });
-
-
-//service.getOwnFriendsPreview = function () {
-//    return $http({
-//        method: 'GET',
-//        url: baseServiceUrl + '/me/friends/preview',
-//        headers: authenticationService.getHeaders()
-//    });
-//}
