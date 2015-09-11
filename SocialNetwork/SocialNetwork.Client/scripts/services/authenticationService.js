@@ -72,7 +72,7 @@ app.factory('authenticationService', function ($http, baseServiceUrl, $localStor
     authenticationService.changePassword = function (userData) {
         return $http({
             method: 'PUT',
-            url: baseServiceUrl + '/me/changepassword',
+            url: baseServiceUrl + '/users/ChangePassword',
             data: userData,
             headers: this.getHeaders()
         });

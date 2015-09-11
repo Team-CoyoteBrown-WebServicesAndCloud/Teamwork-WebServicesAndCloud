@@ -193,6 +193,35 @@
 
             return this.Ok("Logout successful");
         }
+        [HttpPut]
+        [Route("ChangePassword")]
+        public async Task<IHttpActionResult> ChangeUserPassword(ChangePasswordBindingModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            if (this.User.Identity.GetUserName() == "admin")
+            {
+                return this.BadRequest("Password change for user 'admin' is not allowed!");
+            }
+
+            var result = await this.UserManager.ChangePasswordAsync(
+                this.User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return this.GetErrorResult(result);
+            }
+
+            return this.Ok(
+                new
+                {
+                    message = "Password successfully changed.",
+                }
+            );
+        }
 
         [HttpGet]
         [Route("search")]
