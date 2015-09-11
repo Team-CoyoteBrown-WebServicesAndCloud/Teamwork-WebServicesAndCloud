@@ -15,7 +15,5 @@
         void Delete(T entity);
 
         T Delete(object id);
-
-        int SaveChanges();
     }
 }

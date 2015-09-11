@@ -3,7 +3,7 @@
 var app = angular.module('socialNetworkApp', ['ngRoute', 'ngResource', 'naif.base64', 'ngStorage', 'angularSpinner', 'rt.popup', 'infinite-scroll']);
 
 app.constant({
-    'baseServiceUrl': 'http://localhost:52209/api',
+    'baseServiceUrl': 'http://blackfacebook.azurewebsites.net/api',
     'pageSize': 5
 });
 
