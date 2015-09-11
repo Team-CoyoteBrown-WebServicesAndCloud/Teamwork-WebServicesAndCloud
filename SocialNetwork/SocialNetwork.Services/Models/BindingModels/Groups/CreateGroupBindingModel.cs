@@ -11,8 +11,5 @@
         public string Description { get; set; }
 
         public string CoverImageData { get; set; }
-
-        [Required]
-        public GroupType Type { get; set; }
     }
 }

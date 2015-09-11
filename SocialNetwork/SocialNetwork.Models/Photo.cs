@@ -19,7 +19,6 @@
         [Required]
         public string Source { get; set; }
 
-        //content
         public string Description { get; set; }
 
         [Required]

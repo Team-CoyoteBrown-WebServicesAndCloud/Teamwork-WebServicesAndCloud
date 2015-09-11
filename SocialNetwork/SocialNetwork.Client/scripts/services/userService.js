@@ -109,12 +109,44 @@ app.factory('userService', function ($http, baseServiceUrl, $localStorage, authe
         })
     };
 
+    userService.getUserPhotos = function (username) {
+        return $http({
+            method: 'GET',
+            url: baseServiceUrl + '/users/' + username + '/photos',
+            headers: authenticationService.getHeaders()
+        })
+    };
+
     userService.addPhoto = function (photoData) {
         return $http({
             method: 'POST',
             url: baseServiceUrl + '/users/photos',
             headers: authenticationService.getHeaders(),
             data: photoData
+        })
+    };
+
+    userService.getPhoto = function (username, id) {
+        return $http({
+            method: 'GET',
+            url: baseServiceUrl + '/photos/' + id + '/' + username,
+            headers: authenticationService.getHeaders()
+        })
+    };
+    
+    userService.likePhoto = function (id) {
+        return $http({
+            method: 'POST',
+            url: baseServiceUrl + '/photos/' + id + '/likes',
+            headers: authenticationService.getHeaders()
+        })
+    };
+
+    userService.unlikePhoto = function (id) {
+        return $http({
+            method: 'DELETE',
+            url: baseServiceUrl + '/photos/' + id + '/likes',
+            headers: authenticationService.getHeaders()
         })
     };
 

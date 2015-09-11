@@ -58,6 +58,14 @@ app.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'templates/partial/add-photo.html',
             controller: 'MainController'
         })
+        .when('/users/:username/photos/:id', {
+            templateUrl: 'templates/photo.html',
+            controller: 'MainController'
+        })
+        .when('/groups/create', {
+            templateUrl: 'templates/create-group.html',
+            controller: 'MainController'
+        })
         .otherwise({
             redirectTo: '/'
         });

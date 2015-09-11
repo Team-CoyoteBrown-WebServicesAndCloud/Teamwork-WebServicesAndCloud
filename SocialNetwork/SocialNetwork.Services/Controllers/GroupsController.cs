@@ -9,7 +9,6 @@
     using Models.BindingModels.Groups;
     using Models.ViewModels.Groups;
     using SocialNetwork.Models;
-    using SocialNetwork.Models.Enum;
     using UserSessionUtils;
 
     [SessionAuthorize]
@@ -38,10 +37,6 @@
 
             var currentUserId = this.UserIdProvider.GetUserId();
             var currentUser = this.Data.Users.Find(currentUserId);
-            if (!this.CanUserAccessGroup(group, currentUserId))
-            {
-                return this.Unauthorized();
-            }
 
             var groupViewModel = GroupViewModel.ConvertTo(group, currentUser);
 
@@ -70,7 +65,6 @@
                 Name = bindingModel.Name,
                 Description = bindingModel.Description,
                 CoverImageData = null,
-                Type = bindingModel.Type,
                 CreatedOn = DateTime.Now
             };
 
@@ -106,11 +100,6 @@
             {
                 return this.BadRequest("The user is already in this group");
             }
-
-            if (group.Type == GroupType.Private)
-            {
-                return this.Unauthorized();
-            }
             
             group.Members.Add(currentUser);
             currentUser.Groups.Add(group);
@@ -118,16 +107,6 @@
             this.Data.SaveChanges();
 
             return this.Ok();
-        }
-
-        private bool CanUserAccessGroup(Group wantedGroup, string userId)
-        {
-            if (wantedGroup.Type == GroupType.Private && wantedGroup.Members.All(m => m.Id != userId))
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

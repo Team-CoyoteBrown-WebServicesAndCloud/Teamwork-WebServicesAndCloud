@@ -1,15 +1,17 @@
 <div ng-include="'templates/partial/navbar-header.html'"></div>
-<section id="userWall" class="col-lg-8 col-lg-offset-2" ng-controller="UserController">
-    <header id="userWallHeader" class="clearfix" ng-init="getUserFullData()" ng-include="'templates/partial/user-wall-header.html'"></header>
+<section id="userWall" class="col-lg-8 col-lg-offset-2" ng-controller="GroupController">
+    <header id="userWallHeader"
+            class="clearfix"
+            ng-controller="UserController"
+            ng-init="getUserFullData()"
+            ng-include="'templates/partial/group-header.html'">
+    </header>
     <div class="userWallMain col-lg-12" ng-controller="PostController" ng-init="getUserWallPage()">
         <div ng-if="userFullData.isFriend || isAuthorized()"
              ng-include="'templates/partial/post-container.html'"
              class="post-container form-horizontal col-lg-7">
         </div>
         <aside ng-if="userFullData.isFriend" ng-include="'templates/partial/friend-friends-preview.html'"></aside>
-        <aside ng-if="isOwnWall" ng-include="'templates/partial/friends-preview.html'"></aside>
-        <aside ng-include="'templates/user/user-photos-preview.html'"></aside>
-        <aside ng-include="'templates/partial/groups-preview.html'"></aside>
         <section class="col-lg-7 userPagePostsSection"
                  ng-controller="PostController"
                  infinite-scroll='getUserWallPage()'

@@ -47,6 +47,11 @@
     padding: 12px !important;
 }
 
+.groupBox {
+    position: absolute;
+    top: 98%;
+}
+
 .friendsTitle{
     font-weight: bold;
     display: inline-block;

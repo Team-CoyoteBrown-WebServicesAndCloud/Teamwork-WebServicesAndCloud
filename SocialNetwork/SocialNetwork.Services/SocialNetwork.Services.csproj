@@ -217,6 +217,7 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="Models\BindingModels\Groups\CreateGroupBindingModel.cs" />
     <Compile Include="Models\BindingModels\NewsFeedBindingModel.cs" />
     <Compile Include="Models\BindingModels\Photos\AddPhotoBindingModel.cs" />
+    <Compile Include="Models\BindingModels\Photos\GetPhotoBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\AddNewPostBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\DeletePostBindingModel.cs" />
     <Compile Include="Models\BindingModels\Post\EditPostBindingModel.cs" />
@@ -248,6 +250,7 @@
     <Compile Include="Models\ViewModels\Groups\GroupViewModelMinified.cs" />
     <Compile Include="Models\ViewModels\Groups\GroupViewModelPreview.cs" />
     <Compile Include="Models\ViewModels\Photos\BasePhotoViewModel.cs" />
+    <Compile Include="Models\ViewModels\Photos\PhotoViewModel.cs" />
     <Compile Include="Models\ViewModels\Photos\PhotoViewModelMinified.cs" />
     <Compile Include="Models\ViewModels\Photos\PhotoViewModelPreview.cs" />
     <Compile Include="Models\ViewModels\Post\AddPostViewModel.cs" />

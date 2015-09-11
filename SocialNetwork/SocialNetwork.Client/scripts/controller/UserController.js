@@ -45,9 +45,9 @@ app.controller('UserController',
                 function (userData) {
                     $scope.userPreviewData = $scope.checkForEmptyImages(userData.data);
                     if($localStorage.currentUser.userName !== $scope.userPreviewData.username){
-                        if($scope.userPreviewData.isFriend){
+                        if($scope.userPreviewData.userStatus === 'friend'){
                             $scope.userPreviewData.userStatus = 'friend';
-                        } else if($scope.userPreviewData.hasPendingRequest){
+                        } else if($scope.userPreviewData.userStatus === 'pending'){
                             $scope.userPreviewData.userStatus = 'pending';
                         } else {
                             $scope.userPreviewData.userStatus = 'invite';
@@ -237,9 +237,15 @@ app.controller('UserController',
                         post.date = new Date(post.date);
                         post.author = $scope.checkForEmptyImages(post.author);
                         post.wallOwner = $scope.checkForEmptyImages(post.wallOwner);
+
                         post.comments.forEach(function (comment) {
                             comment.date = new Date(comment.date);
                             comment.author = $scope.checkForEmptyImages(comment.author);
+
+                            comment.commentReplies.forEach(function (reply) {
+                                reply.date = new Date(reply.date);
+                                reply.author = $scope.checkForEmptyImages(reply.author);
+                            })
                         })
                     });
 
@@ -273,6 +279,11 @@ app.controller('UserController',
                         post.comments.forEach(function (comment) {
                             comment.date = new Date(comment.date);
                             comment.author = $scope.checkForEmptyImages(comment.author);
+
+                            comment.commentReplies.forEach(function (reply) {
+                                reply.date = new Date(reply.date);
+                                reply.author = $scope.checkForEmptyImages(reply.author);
+                            })
                         })
                     });
 
@@ -286,7 +297,7 @@ app.controller('UserController',
                     usSpinnerService.stop('spinner-1');
                 },
                 function (error) {
-                    notifyService.showError('Error while loading posts' + error.data.message);
+                    notifyService.showError('Error while loading posts. ' + error.data.message);
                     usSpinnerService.stop('spinner-1');
                 }
             )
@@ -305,9 +316,9 @@ app.controller('UserController',
 
                     delete $scope.photoData;
                 },
-                function () {
+                function (error) {
                     usSpinnerService.stop('spinner-1');
-                    notifyService.showError("Unable to upload the photo " + error.data.message);
+                    notifyService.showError("Unable to upload the photo. " + error.data.message);
                 }
             )
         };
@@ -319,9 +330,68 @@ app.controller('UserController',
                     usSpinnerService.stop('spinner-1');
                     $scope.userPhotos = serverData.data;
                 },
-                function () {
+                function (error) {
                     usSpinnerService.stop('spinner-1');
+                    notifyService.showError("Unable to show user photos preview. " + error.data.message);
                 }
             )
-        }
+        };
+
+        $scope.getUserPhotos = function () {
+            usSpinnerService.spin('spinner-1');
+            userService.getUserPhotos($routeParams.username).then(
+                function (serverData) {
+                    usSpinnerService.stop('spinner-1');
+                    $scope.userPhotos = serverData.data;
+                },
+                function (error) {
+                    usSpinnerService.stop('spinner-1');
+                    notifyService.showError("Unable to show user photos. " + error.data.message);
+                }
+            )
+        };
+
+        $scope.getPhoto = function () {
+            usSpinnerService.spin('spinner-1');
+            userService.getPhoto($routeParams.username, $routeParams.id).then(
+                function (serverData) {
+                    usSpinnerService.stop('spinner-1');
+                    $scope.photo = serverData.data;
+                },
+                function (error) {
+                    usSpinnerService.stop('spinner-1');
+                    notifyService.showError("Unable to show wanted photo. " + error.data.message);
+                }
+            )
+        };
+
+        $scope.likePhoto = function (photo) {
+            usSpinnerService.spin('spinner-1');
+            userService.likePhoto(photo.id).then(
+                function () {
+                    usSpinnerService.stop('spinner-1');
+                    photo.liked = true;
+                    photo.likesCount++;
+                },
+                function (error) {
+                    usSpinnerService.stop('spinner-1');
+                    notifyService.showError("Unable to like wanted photo. " + error.data.message);
+                }
+            )
+        };
+
+        $scope.unlikePhoto = function (photo) {
+            usSpinnerService.spin('spinner-1');
+            userService.unlikePhoto(photo.id).then(
+                function () {
+                    usSpinnerService.stop('spinner-1');
+                    photo.liked = false;
+                    photo.likesCount--;
+                },
+                function (error) {
+                    usSpinnerService.stop('spinner-1');
+                    notifyService.showError("Unable to like wanted photo. " + error.data.message);
+                }
+            )
+        };
     });

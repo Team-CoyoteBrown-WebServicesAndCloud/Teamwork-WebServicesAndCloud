@@ -1,0 +1,29 @@
+<div ng-include="'templates/partial/navbar-header.html'"></div>
+<main id="wrapper" ng-controller="UserController" ng-init="getPhoto()">
+    <section class="col-lg-8 col-lg-offset-2" id="mainSection" ng-init="getUserFullData()">
+        <div class="upload-image-section" id="showImageSection">
+            <section id="show-image-content" class="image-section-big">
+                <img class="image-preview image-max-width-clear"
+                     ng-src="{{photo.image}}"
+                     base-sixty-four-image="photo.image"/>
+            </section>
+        </div>
+        <section ng-if="photo.description" class="mediumsSection clearfix">
+            <textarea disabled class="description-section">{{photo.description}}</textarea>
+        </section>
+
+        <section id="photoLikeSection">
+            <img ng-if="!photo.liked"
+                 ng-click="likePhoto(photo)"
+                 class="postIcon clickableIcon photoLike"
+                 src="resourses/images/like-button.png"/>
+            <img ng-if="photo.liked"
+                 ng-click="unlikePhoto(photo)"
+                 class="postIcon clickableIcon photoLike"
+                 src="resourses/images/unlike-button.png"/>
+            <span class="queryResult">{{photo.likesCount}}</span>
+            <img class="postIcon" src="resourses/images/comment-icon.png" alt=""/>
+            <span class="queryResult">{{photo.commentsCount}}</span>
+        </section>
+    </section>
+</main>

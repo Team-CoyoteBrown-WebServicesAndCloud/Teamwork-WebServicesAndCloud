@@ -86,10 +86,10 @@ namespace SocialNetwork.Data.Data
                 .WithMany(u => u.Photos)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<PhotoLike>()
-                .HasRequired<ApplicationUser>(p => p.PhotoOwner)
-                .WithMany()
-                .WillCascadeOnDelete(false);
+            //modelBuilder.Entity<PhotoLike>()
+            //    .HasRequired<ApplicationUser>(p => p.PhotoOwner)
+            //    .WithMany()
+            //    .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CommentReply>()
                 .HasRequired<Comment>(c => c.Comment)

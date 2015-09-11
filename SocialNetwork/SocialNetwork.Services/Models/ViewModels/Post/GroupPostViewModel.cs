@@ -47,7 +47,6 @@
                     CoverImageData = post.Group.CoverImageData,
                     CreatedOn = post.Group.CreatedOn,
                     Description = post.Group.Description,
-                    Type = post.Group.Type.ToString()
                 },
                 PostContent = post.Content,
                 Date = post.PostedOn,

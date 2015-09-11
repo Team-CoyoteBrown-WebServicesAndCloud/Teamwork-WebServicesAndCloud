@@ -201,6 +201,11 @@ img.mini-thumbnail {
     border-radius: 4px;
 }
 
+.darkSection {
+    background: #c2c2c2;
+    border: 1px solid #ADADAD;
+}
+
 .comment-mini-thumbnail{
     width: 40px;
     height: 40px;

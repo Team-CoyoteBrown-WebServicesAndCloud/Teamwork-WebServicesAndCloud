@@ -55,7 +55,6 @@
                 TotalCommentsCount = post.Comments.Count,
                 Comments = post.Comments
                     .OrderByDescending(c => c.PostedOn)
-                    .Take(4)
                     .AsQueryable()
                     .Select(CommentViewModel.Create(currentUser))
             };

@@ -1,0 +1,36 @@
+<div ng-include="'templates/partial/navbar-header.html'"></div>
+<main id="wrapper">
+    <section class="col-lg-8 col-lg-offset-2" id="mainSection" ng-controller="GroupController">
+        <section class="mediumsSection clearfix">
+            <label id="groupDescriptionLabel" for="photoDescription">Name:</label>
+            <input type="text" class="col-lg-6 col-lg-offset-3" ng-model="groupData.name"></textarea>
+        </section>
+        <section class="mediumsSection clearfix">
+            <label id="photoDescriptionLabel" for="photoDescription">Description:</label>
+            <textarea id="photoDescription" rows="2" class="col-lg-8" ng-model="groupData.description"></textarea>
+        </section>
+        <div class="upload-image-section">
+            <section id="upload-cover-image-preview-section" class="image-section-big">
+                <p class="fontSize-medium">Cover image:</p>
+                <img class="image-preview image-max-width"
+                     ng-src="{{groupData.image}}"
+                     ng-show="groupData.image != null"
+                     base-sixty-four-image="groupData.image"/>
+            </section>
+            <label id="addPhoto" class="btn btn-primary blackButton" for="add-photo">
+                <input class="file-button"
+                       id="add-photo"
+                       type="file"
+                       ng-model="groupData.image"
+                       base-sixty-four-input>
+                Choose Photo
+            </label>
+        </div>
+        <div class="form-group buttons">
+            <div class="col-lg-10 col-lg-offset-5 confirm-buttons">
+                <a href="#/" class="btn btn-default">Cancel</a>
+                <button ng-click="createGroup(groupData)" type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </section>
+</main>

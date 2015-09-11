@@ -29,7 +29,6 @@
                 Id = group.Id,
                 Name = group.Name,
                 CoverImageData = group.CoverImageData,
-                Type = group.Type.ToString(),
                 CreatedOn = group.CreatedOn,
                 Description = group.Description,
                 Admins = group.Admins
@@ -51,7 +50,6 @@
                 Id = group.Id,
                 Name = group.Name,
                 CoverImageData = group.CoverImageData,
-                Type = group.Type.ToString(),
                 CreatedOn = group.CreatedOn,
                 Description = group.Description,
                 Admins = group.Admins

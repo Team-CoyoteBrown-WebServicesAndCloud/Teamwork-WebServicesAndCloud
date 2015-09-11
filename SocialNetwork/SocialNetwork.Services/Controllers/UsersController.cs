@@ -299,6 +299,34 @@
         }
 
         [HttpGet]
+        [Route("{username}/friends")]
+        public IHttpActionResult GetFriendFriendsData(string username)
+        {
+            var wantedUser = this.Data
+                .Users
+                .All()
+                .FirstOrDefault(u => u.UserName == username);
+            if (wantedUser == null)
+            {
+                return this.NotFound();
+            }
+
+            var currentUserId = this.UserIdProvider.GetUserId();
+            if (currentUserId == null)
+            {
+                return this.BadRequest();
+            }
+
+            var currentUser = this.Data.Users.Find(currentUserId);
+            var userFriends = wantedUser.Friends
+               .AsQueryable()
+               .Select(UserViewModelMinified.Create(currentUser));
+
+            return this.Ok(userFriends);
+        }
+
+
+        [HttpGet]
         [Route("{username}/groups")]
         public IHttpActionResult GetUserGroups(string username)
         {
@@ -331,6 +359,12 @@
                 return this.NotFound();
             }
 
+            var currentUserId = this.UserIdProvider.GetUserId();
+            if (!this.HasAuthorizationForDetailedInfo(wantedUser, currentUserId))
+            {
+                return this.Unauthorized();
+            }
+
             var userPhotos = this.Data
                 .Photos
                 .All()
@@ -358,13 +392,23 @@
                 return this.NotFound();
             }
 
+            var currentUserId = this.UserIdProvider.GetUserId();
+            if (!this.HasAuthorizationForDetailedInfo(wantedUser, currentUserId))
+            {
+                return this.Unauthorized();
+            }
+
             var userPhotos = this.Data
                 .Photos
                 .All()
                 .Where(p => p.PhotoOwnerId == wantedUser.Id)
                 .Select(PhotoViewModelMinified.Create);
 
-            return this.Ok(userPhotos);
+            return this.Ok(new
+            {
+                Photos = userPhotos,
+                TotalCount = wantedUser.Photos.Count
+            });
         }
 
         [HttpPost]
@@ -403,27 +447,5 @@
             return this.Ok();
         }
 
-        private bool IsValidBase64Format(string base64String)
-        {
-            if (string.IsNullOrEmpty(base64String) ||
-                base64String.Length % 4 != 0 ||
-                base64String.Contains(" ") ||
-                base64String.Contains("\t") ||
-                base64String.Contains("\r") ||
-                base64String.Contains("\n"))
-            {
-                return false;
-            }
-
-            try
-            {
-                Convert.FromBase64String(base64String);
-                return true;
-            }
-            catch (Exception exception)
-            {
-                return false;
-            }
-        }
     }
 }

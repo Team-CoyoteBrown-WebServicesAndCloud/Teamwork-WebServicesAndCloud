@@ -20,7 +20,6 @@
                 {
                     Id = group.Id,
                     Name = group.Name,
-                    Type = group.Type.ToString(),
                     Description = group.Description,
                     CoverImageData = group.CoverImageData,
                     CreatedOn = group.CreatedOn

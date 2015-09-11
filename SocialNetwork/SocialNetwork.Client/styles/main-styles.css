@@ -271,6 +271,10 @@ a{
     vertical-align: top;
 }
 
+#showImageSection{
+    margin-bottom: 0;
+}
+
 .confirm-buttons {
     margin-bottom: 3%;
 }
@@ -298,12 +302,31 @@ a{
     font-size: .9em;
 }
 
+#groupDescriptionLabel{
+    display: block;
+    font-size: 16px;
+}
+
+.fontSize-medium{
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.black-medium-name {
+    color: #000000;
+    font-size: 15px;
+}
+
 .file-button{
     display: none !important;
 }
 
 #upload-cover-image-preview-section {
     margin: 1% auto;
+}
+
+#show-image-content{
+    margin: 0 auto
 }
 
 .upload-cover-image-preview {
@@ -354,6 +377,28 @@ a{
 .image-max-width {
     max-width: 100%;
     margin-bottom: 3%;
+}
+
+.image-max-width-clear{
+    max-width: 100%;
+}
+
+.description-section{
+    width: 60%;
+    height: 75px;
+    margin: 0 auto;
+    padding-top: 0;
+    text-overflow: ellipsis !important;
+    border: ridge 1px rgba(217, 217, 217, 0.85);
+    min-height: 3em !important;
+    overflow: auto;
+    background-color: #efefef;
+    resize: none;
+}
+
+.description-section:empty:not(:focus):before{
+    content:attr(data-ph);
+    font-size: .9em;
 }
 
 .buttons{
@@ -459,6 +504,17 @@ a{
     border: 1px solid black;
     top: 10%;
     position: absolute;
+}
+
+#photoLikeSection{
+    width: 100%;
+    text-align: center;
+}
+
+.photoLike{
+    margin: 0 auto;
+    width: 24px !important;
+    height: 24px !important;
 }
 
 @media (min-width: 1366px) {

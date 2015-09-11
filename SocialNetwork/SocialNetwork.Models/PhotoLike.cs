@@ -11,14 +11,8 @@
         public virtual Photo Photo { get; set; }
 
         [Required]
-        public string AuthorId { get; set; }
+        public string UserId { get; set; }
 
-        public virtual ApplicationUser Author { get; set; }
-
-        [Required]
-        public string PhotoOwnerId { get; set; }
-
-        public virtual ApplicationUser PhotoOwner { get; set; }
-
+        public virtual ApplicationUser User { get; set; }
     }
 }

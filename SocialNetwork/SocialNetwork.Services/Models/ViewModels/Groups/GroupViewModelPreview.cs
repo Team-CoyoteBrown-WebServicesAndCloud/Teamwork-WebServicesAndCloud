@@ -13,8 +13,7 @@
                 return group => new GroupViewModelPreview
                 {
                     Id = group.Id,
-                    Name = group.Name,
-                    Type = group.Type.ToString()
+                    Name = group.Name
                 };
             }
         }

@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Enum;
 
     public class Group
     {
@@ -26,9 +25,6 @@
         public string Description { get; set; }
 
         public string CoverImageData { get; set; }
-
-        [Required]
-        public GroupType Type { get; set; }
 
         [Required]
         public DateTime CreatedOn { get; set; }

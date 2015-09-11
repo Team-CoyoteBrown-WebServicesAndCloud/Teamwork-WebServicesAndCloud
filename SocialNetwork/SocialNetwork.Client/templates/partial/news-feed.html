@@ -129,16 +129,68 @@
                         </div>
                         <p ng-show="!comment.editing" class="content">{{comment.commentContent}}</p>
                     </section>
+
+
+                    <section ng-if="comment.commentReplies.length" class="postCommentsSection darkSection col-lg-10 col-lg-offset-2">
+                        <section class="postComments clearfix" ng-repeat="reply in comment.commentReplies">
+                            <div class="postComment">
+                                <div class="post-image">
+                                    <img class="comment-mini-thumbnail hover-box"
+                                         popup-show="templates/partial/user-preview.html"
+                                         ng-click="getUserPreviewData(reply.author.username)"
+                                         ng-src="{{reply.author.profileImageData}}"/>
+                                </div>
+                                <div class="comment-info post-info">
+                                    <div class="postUserInfo">
+                                        <a href="#/users/{{reply.author.username}}" class="profile-link">{{reply.author.name}}</a>
+                                    </div>
+                                    <div class="dateTime commentTime">
+                                        <span>on</span>
+                                        <time>{{reply.date | date:"EEEE, MMMM d, y 'at' h:mm a"}}</time>
+                                    </div>
+                                </div>
+                            </div>
+                            <aside ng-if="isAuthorized(post)" class="options commentOptions pull-right">
+                                <img ng-if="!reply.liked"
+                                     ng-click="likeComment(reply, post.id)"
+                                     class="postIcon clickableIcon"
+                                     src="resourses/images/like-button.png"/>
+                                <img ng-if="reply.liked"
+                                     ng-click="unlikeComment(reply, post.id)"
+                                     class="postIcon clickableIcon"
+                                     src="resourses/images/unlike-button.png"/>
+                                <span class="queryResult">{{reply.likesCount}}</span>
+                                <img ng-if="isEditable(reply.author)"
+                                     ng-click="reply.editing = !reply.editing; reply.editedCommentContent = reply.commentContent"
+                                     class="postIcon clickableIcon"
+                                     src="resourses/images/edit-button.png"/>
+                                <img ng-if="isDeletable(post, reply.author)"
+                                     ng-click="deleteComment(reply, post)"
+                                     class="postIcon clickableIcon"
+                                     src="resourses/images/delete-button.png"/>
+                            </aside>
+                            <section class="post-content">
+                                <div ng-if="reply.editing" class="editContentSection clearfix">
+                                        <textarea class="editContent editComment col-lg-9"
+                                                  ng-model="reply.editedCommentContent"></textarea>
+
+                                    <div class="optionButtons col-lg-5 col-lg-offset-2">
+                                        <button class="btn btn-default btnEditComment"
+                                                ng-click="editComment(reply, post)">Edit
+                                        </button>
+                                        <a class="btn btn-default btnEditComment"
+                                           ng-click="reply.editing = false">Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                                <p ng-show="!reply.editing" class="content">{{reply.commentContent}}</p>
+                            </section>
+                    </section>
+
+
+
                 </section>
             </section>
-            <button ng-if="post.comments.length < post.totalCommentsCount"
-                    ng-click="getPostComments(post)"
-                    class="extraComments pull-right">Show all comments...
-            </button>
-            <button ng-if="post.comments.length == post.totalCommentsCount && post.totalCommentsCount > 3"
-                    ng-click="hidePostComments(post)"
-                    class="extraComments pull-right">Hide comments...
-            </button>
         </section>
     </article>
 </section>

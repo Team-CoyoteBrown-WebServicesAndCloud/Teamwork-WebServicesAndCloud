@@ -1,11 +1,13 @@
 ﻿namespace SocialNetwork.Services.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Http;
     using Data.Data;
     using Data.Interfaces;
     using Infrastructure;
     using Microsoft.AspNet.Identity;
+    using SocialNetwork.Models;
 
     public class BaseApiController : ApiController
     {
@@ -73,6 +75,16 @@
             {
                 return false;
             }
+        }
+
+        protected bool HasAuthorizationForDetailedInfo(ApplicationUser wantedUser, string currentUserId)
+        {
+            if (wantedUser.Friends.Any(f => f.Id == currentUserId) || currentUserId == wantedUser.Id)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

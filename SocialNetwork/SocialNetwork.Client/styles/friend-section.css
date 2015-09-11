@@ -13,9 +13,18 @@
     text-align: center;
 }
 
+.listPreview{
+    margin-bottom: 15px;
+}
+
 .listElement{
     text-align: center;
     margin-bottom: 15px;
+}
+
+.listElementDistance{
+    text-align: center;
+    margin: 0 -6px 0 0;
 }
 
 .imageSection{
@@ -23,8 +32,18 @@
     margin: 10px 0;
 }
 
+.imagePreviewSection {
+    display: block;
+    margin: 10px;
+}
+
 .largeImageThumbnail{
     width: 150px;
+    height: 150px;
+}
+
+.imagePreview{
+    width: 190px;
     height: 150px;
 }
 

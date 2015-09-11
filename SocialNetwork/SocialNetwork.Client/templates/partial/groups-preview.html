@@ -1,0 +1,13 @@
+<section ng-controller="UserController">
+    <div class="friendsBox well bs-component clearfix groupBox">
+        <div class="friendsCount" ng-init="userData()">
+            <p class="friendsTitle">Groups - </p>
+            <span class="friendsTotalCount">{{userFullData.groups.length}}</span>
+        </div>
+        <ul class="groupList" ng-init="getUserFullData()">
+            <li ng-repeat="group in userFullData.groups">
+                <a class="black-medium-name" href="#/groups/{{group.id}}/">{{group.name}}</a>
+            </li>
+        </ul>
+    </div>
+</section>
